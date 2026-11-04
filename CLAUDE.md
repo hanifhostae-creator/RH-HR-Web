@@ -50,3 +50,8 @@ Text fields `summary` (services) and `text` (recruitmentItems) may contain `**wo
 Do not rename keys without updating both the front end and the admin panel.
 After changing content, run `node tools/build-site.js` so the static HTML and SEO tags match.
 Forms currently open the visitor's email app (`mailto:`); the back end will replace this.
+
+## Brand assets
+
+`brand/business-card/` — print-ready business card (90 × 55 mm + 3 mm bleed) in the website style.
+Edit `build-card.js` and run `node brand/business-card/build-card.js` to regenerate the PDF and previews.

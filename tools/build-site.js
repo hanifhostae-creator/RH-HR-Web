@@ -15,7 +15,7 @@ const path = require('path');
 const http = require('http');
 const vm = require('vm');
 
-const SITE_URL = 'https://rhmanagements.com';
+const SITE_URL = 'https://www.rhmanagements.com';
 const ROOT = path.resolve(__dirname, '..');
 
 const ctx = { window: {} };
