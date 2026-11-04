@@ -4,6 +4,7 @@
 (function () {
   'use strict';
   var S = window.SITE, C = S.company, I = window.icon;
+  document.documentElement.classList.add('js');
   var page = document.body.getAttribute('data-page') || 'home';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -12,7 +13,7 @@
   function hl(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<mark>$1</mark>'); }
   function plain(s) { return String(s == null ? '' : s).replace(/\*\*/g, ''); }
   function svc(id) { return S.services.filter(function (x) { return x.id === id; })[0]; }
-  function svcUrl(x) { return 'service.html?id=' + encodeURIComponent(x.id); }
+  function svcUrl(x) { return 'service-' + x.id + '.html'; }
   function tel() { return 'tel:' + C.phone.replace(/[^+\d]/g, ''); }
   function group(g) { return S.services.filter(function (x) { return x.group === g; }); }
   function arrow() { return I('arrow', 'ic-sm'); }
@@ -121,6 +122,12 @@
       (withTags && x.tags ? '<div class="tags">' + x.tags.map(function (t) { return '<span>' + I('check', 'ic-xs') + esc(t) + '</span>'; }).join('') + '</div>' : '') +
       '<span class="svc-foot"><span class="more">Learn more</span><i class="go">' + arrow() + '</i></span><i class="wm" aria-hidden="true">' + I(x.icon) + '</i></a>';
   }
+  function offerRows() {
+    var L = S.recruitmentItems, h = Math.ceil(L.length / 2);
+    function item(r) { return '<div class="oi"><i class="tile sm">' + I(r.icon) + '</i><span><b>' + esc(r.title) + '</b><small>' + hl(r.text) + '</small></span></div>'; }
+    function row(list, cls) { var a = list.map(item).join(''); return '<div class="oq ' + cls + '"><div class="oq-track"><div class="oq-set">' + a + '</div><div class="oq-set" aria-hidden="true">' + a + '</div></div></div>'; }
+    return '<div class="offer-rows">' + row(L.slice(0, h), 'from-right') + row(L.slice(h), 'from-left') + '</div>';
+  }
   function audience() {
     var flags = ['pk', 'in', 'np', 'bd', 'lk', 'ph', 'ng', 'ke', 'gh', 'ug', 'et', 'eg'];
     return '<section class="section aud-sec"><div class="wrap aud">' +
@@ -164,22 +171,20 @@
 
       '<section class="section" id="services"><div class="wrap">' + head('Our main service', 'Recruitment & HR Solutions', 'Hiring is the heart of our company. We supply skilled and unskilled workers to companies, one by one or in bulk, from inside and outside the UAE.', true) +
       '<div class="grid g3">' + ['inside-recruitment', 'outside-recruitment', 'hr-solution'].map(function (id) { return svcCard(svc(id), true); }).join('') + '</div>' +
-      '<div class="offer reveal"><div class="offer-h"><h3>Everything we offer for hiring</h3><a href="service.html?id=recruitment" class="link">Recruitment services ' + arrow() + '</a></div><div class="offer-grid">' + S.recruitmentItems.map(function (r) { return '<div class="oi"><i class="tile sm">' + I(r.icon) + '</i><span><b>' + esc(r.title) + '</b><small>' + hl(r.text) + '</small></span></div>'; }).join('') + '</div></div></div></section>' +
+      '<div class="offer reveal"><div class="offer-h"><h3>Everything we offer for hiring</h3><a href="service-recruitment.html" class="link">Recruitment services ' + arrow() + '</a></div>' + offerRows() + '</div></div></section>' +
 
       '<section class="section dark"><div class="wrap">' + head('How hiring works', 'From requirement to first working day', 'A clear, managed process — you stay informed at every step.', true).replace('sec-head', 'sec-head on-dark') + steps(S.hiringSteps, true) + '</div></section>' +
 
       '<section class="section" id="about"><div class="wrap split"><div class="reveal"><span class="eyebrow">About our company</span><h2>' + esc(C.name) + '</h2><p class="lead-d">We are a recruitment and HR solutions company based in Dubai. We supply skilled and unskilled workers to companies in bulk, from inside and outside the UAE — and help with company setup, development and marketing.</p>' + ticks(['One partner for hiring, visas, travel and setup', 'Candidates from 40 countries across Africa & Asia', 'Office in Al Nahda 1, Dubai']) + btn('about.html', 'More about us', 'btn-primary') + '</div>' +
       '<div class="about-vis reveal"><div class="av-main"><span class="q">“</span><p>Our aim is to give every client modern, optimised services and a partner they can trust.</p><div class="av-by"><span class="mark">' + logoMark() + '</span><span><b>' + esc(C.short) + '</b><small>' + esc(C.city) + '</small></span></div></div><div class="av-mini">' + [['target', 'Focused', 'on results'], ['clock', 'Fast', 'placement'], ['heart', 'Trusted', 'partner']].map(function (a) { return '<div><i>' + I(a[0]) + '</i><b>' + a[1] + '</b><small>' + a[2] + '</small></div>'; }).join('') + '</div></div></div></section>' +
 
-      '<section class="section soft" id="travel"><div class="wrap split"><div class="reveal">' + boardingPass() + '</div><div class="reveal"><span class="eyebrow">Travel & Tour</span><h2>Visit visas and flight tickets</h2><p class="lead-d">We also run a travel and tour service. We arrange visit visas for many countries and book your tickets, so your journey is simple from start to finish.</p>' + ticks(['Visit visa for Saudi Arabia', 'Visit visa for European countries', 'Visit visa for the USA', 'Visit visa for Asian countries', 'Flight ticket booking', 'Hotel booking'], 'two') + btn('service.html?id=travel-tour', 'Explore Travel & Tour', 'btn-primary') + '</div></div>' +
+      '<section class="section soft" id="travel"><div class="wrap split"><div class="reveal">' + boardingPass() + '</div><div class="reveal"><span class="eyebrow">Travel & Tour</span><h2>Visit visas and flight tickets</h2><p class="lead-d">We also run a travel and tour service. We arrange visit visas for many countries and book your tickets, so your journey is simple from start to finish.</p>' + ticks(['Visit visa for Saudi Arabia', 'Visit visa for European countries', 'Visit visa for the USA', 'Visit visa for Asian countries', 'Flight ticket booking', 'Hotel booking'], 'two') + btn('service-travel-tour.html', 'Explore Travel & Tour', 'btn-primary') + '</div></div>' +
       '<div class="dests reveal"><p class="dests-h">Popular destinations</p>' + destRow(S.destinations.asia) + destRow(S.destinations.world, true) + '</div></section>' +
 
       '<section class="section"><div class="wrap">' + head('More services', 'Other services we offer', 'Beyond recruitment, we help you start, run and grow your business in the UAE.', true) + '<div class="grid g3">' + ['business-setup', 'travel-tour', 'web-development', 'seo-digital-marketing', 'management', 'e-commerce'].map(function (id) { return svcCard(svc(id)); }).join('') + '</div></div></section>' +
 
-      '<section class="section soft"><div class="wrap split"><div class="reveal"><span class="eyebrow">Company formation</span><h2>Want to start a business in the UAE?</h2><p class="lead-d">The UAE offers a strategic location, world-class infrastructure and attractive tax benefits. We guide you through every step — from the company licence and visa processing to compliance and a strong online presence.</p><a class="callout" href="' + tel() + '"><i class="tile sm">' + I('phone') + '</i><span><small>Support center</small><b>' + esc(C.phone) + '</b></span></a>' + btn('service.html?id=business-setup', 'Business setup details', 'btn-primary') + '</div><div class="reveal">' + visual(svc('business-setup')) + '</div></div>' +
-      '<div class="wrap" style="margin-top:56px">' + head('Work process', 'We follow a clear process', '', true) + steps(S.process) + '</div></section>' +
 
-      '<section class="section"><div class="wrap split rev"><div class="reveal"><span class="eyebrow">IT solutions</span><h2>Grow with us</h2><p class="lead-d">Strong web development and design give your venture a confident online presence. Digital marketing brings customers, e-commerce turns visits into sales, and HR solutions help you manage your team.</p>' + ticks(['All-in-one IT solution company', 'Expert and friendly teams', 'Quality services for your business', 'Reliable HR solutions']) + btn('contact.html', 'Contact now', 'btn-primary') + '</div><div class="reveal">' + visual(svc('seo-digital-marketing')) + '</div></div></section>' +
+      '<section class="section soft"><div class="wrap split rev"><div class="reveal"><span class="eyebrow">IT solutions</span><h2>Grow with us</h2><p class="lead-d">Strong web development and design give your venture a confident online presence. Digital marketing brings customers, e-commerce turns visits into sales, and HR solutions help you manage your team.</p>' + ticks(['All-in-one IT solution company', 'Expert and friendly teams', 'Quality services for your business', 'Reliable HR solutions']) + btn('contact.html', 'Contact now', 'btn-primary') + '</div><div class="reveal">' + visual(svc('seo-digital-marketing')) + '</div></div></section>' +
 
       contactBlock();
   }
@@ -199,7 +204,7 @@
   }
 
   function service() {
-    var id = new URLSearchParams(location.search).get('id'), x = svc(id) || S.services[0];
+    var id = (SPA && svcId) || document.body.getAttribute('data-id') || new URLSearchParams(location.search).get('id'), x = svc(id) || S.services[0];
     document.title = x.name + ' | ' + C.short;
     var others = S.services.filter(function (y) { return y !== x; });
     var wide = x.visual === 'world' || x.visual === 'uae' || x.visual === 'network';
@@ -253,13 +258,12 @@
   function toHash(root) {
     if (!SPA) return;
     root.querySelectorAll('a[href]').forEach(function (a) {
-      var h = a.getAttribute('href'), m = h.match(/^service\.html\?id=(.+)$/);
+      var h = a.getAttribute('href'), m = h.match(/^service-(.+)\.html$/);
       if (m) a.setAttribute('href', '#service-' + decodeURIComponent(m[1]));
       else if (FILES[h]) a.setAttribute('href', '#' + FILES[h]);
     });
   }
   if (SPA) {
-    window.URLSearchParams = (function (U) { return function (q) { return svcId && (q === location.search) ? new U('id=' + svcId) : new U(q); }; })(window.URLSearchParams);
     page = fromHash();
   }
   function mount() {

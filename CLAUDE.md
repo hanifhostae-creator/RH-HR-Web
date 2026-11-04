@@ -21,9 +21,11 @@ session you are in.
 
 Static site, no build step, no framework. Serve with `python3 -m http.server 8000`.
 
-- `index.html`, `about.html`, `services.html`, `service.html?id=<id>`, `portfolio.html`,
-  `contact.html`, `hire-staff.html`, `partner-with-us.html` — thin shells; each sets
-  `<body data-page="...">` and loads the three scripts.
+- `index.html`, `about.html`, `services.html`, `service-<id>.html` (one per service), `portfolio.html`,
+  `contact.html`, `hire-staff.html`, `partner-with-us.html` — **generated** by `tools/build-site.js`
+  (SEO tags, JSON-LD, pre-rendered content). Do not hand-edit them; edit `content.js`/`app.js`
+  and run `node tools/build-site.js`. It also writes `sitemap.xml` and `robots.txt`
+  (set `SITE_URL` in the script to the live domain).
 - `assets/js/content.js` — **all site content** as `window.SITE` (single source of truth).
 - `assets/js/icons.js` — `icon(name)` line icons, `flag(code)` / `flagShapes()` / `flagParts()`.
 - `assets/js/app.js` — renders header, footer and each page from `window.SITE`; hero map
@@ -46,4 +48,5 @@ Conventions: vanilla ES5-style JS (no modules), escape user text with `esc()`, k
 Text fields `summary` (services) and `text` (recruitmentItems) may contain `**word**` to highlight words; render with `hl()`, strip with `plain()`.
 
 Do not rename keys without updating both the front end and the admin panel.
+After changing content, run `node tools/build-site.js` so the static HTML and SEO tags match.
 Forms currently open the visitor's email app (`mailto:`); the back end will replace this.
