@@ -15,6 +15,7 @@ const ROOT = path.resolve(DIR, '../..');
 const ctx = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'assets/js/icons.js'), 'utf8'), ctx);
 const icon = ctx.window.icon, flagShapes = ctx.window.flagShapes;
+const LOGO = 'data:image/png;base64,' + fs.readFileSync(path.join(DIR, 'rh-logo.png')).toString('base64');
 
 /* ---------- card content (same as the original card) ---------- */
 const CARD = {
@@ -60,7 +61,7 @@ function inPoly(x, y, p) {
 }
 const PLANE = 'M12 0L4-2L-2-11L-5-11L-3-2L-8-1.5L-10-5L-12-5L-10 0L-12 5L-10 5L-8 1.5L-3 2L-5 11L-2 11L4 2Z';
 
-function mapSVG({ ux, uy, sc, dotA, flags, routes = true }) {
+function mapSVG({ ux, uy, sc, dotA, flags, routes = true, uae = true }) {
   const W = 960, H = 610, P = (lon, lat) => [ux + (lon - UAE[0]) * sc, uy - (lat - UAE[1]) * sc];
   let s = `<svg class="map" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">`;
   s += `<defs><radialGradient id="uaeG"><stop offset="0" stop-color="#e8bd66" stop-opacity=".55"/><stop offset="1" stop-color="#e8bd66" stop-opacity="0"/></radialGradient></defs><g fill="#7f9dff" fill-opacity="${dotA}">`;
@@ -83,11 +84,11 @@ function mapSVG({ ux, uy, sc, dotA, flags, routes = true }) {
       s += `<path d="${PLANE}" fill="#ffe7b0" transform="translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${ang.toFixed(1)}) scale(.75)"/>`;
     }
   });
-  s += `<circle cx="${ux}" cy="${uy}" r="70" fill="url(#uaeG)"/><circle cx="${ux}" cy="${uy}" r="22" fill="none" stroke="#e8bd66" stroke-opacity=".45" stroke-width="1.2"/><circle cx="${ux}" cy="${uy}" r="38" fill="none" stroke="#e8bd66" stroke-opacity=".2" stroke-width="1.2"/><circle cx="${ux}" cy="${uy}" r="6" fill="#e8bd66" stroke="#050914" stroke-width="2"/>`;
+  if (uae) s += `<circle cx="${ux}" cy="${uy}" r="70" fill="url(#uaeG)"/><circle cx="${ux}" cy="${uy}" r="22" fill="none" stroke="#e8bd66" stroke-opacity=".45" stroke-width="1.2"/><circle cx="${ux}" cy="${uy}" r="38" fill="none" stroke="#e8bd66" stroke-opacity=".2" stroke-width="1.2"/><circle cx="${ux}" cy="${uy}" r="6" fill="#e8bd66" stroke="#050914" stroke-width="2"/>`;
   return s + '</svg>';
 }
 
-const emblem = (size) => `<div class="emb" style="--s:${size}mm"><div class="emb-ring"></div><div class="emb-tile"><span class="emb-gloss"></span><span class="t3d" data-t="RH">RH</span></div></div>`;
+const emblem = (size) => `<div class="emb" style="--s:${size}mm"><div class="emb-glow"></div><img class="emb-logo" src="${LOGO}" alt="RH logo"><span class="emb-gloss"></span></div>`;
 const t3d = (text, cls) => `<span class="t3d ${cls || ''}" data-t="${text}">${text}</span>`;
 
 const front = `<section class="card front">
@@ -107,7 +108,7 @@ const front = `<section class="card front">
 </section>`;
 
 const back = `<section class="card back">
-  ${mapSVG({ ux: 905, uy: 178, sc: 8.2, dotA: .26, flags: false, routes: false })}
+  ${mapSVG({ ux: 905, uy: 178, sc: 8.2, dotA: .26, flags: false, routes: false, uae: false })}
   <div class="glow g3"></div>
   <div class="side">
     ${emblem(15)}
@@ -115,7 +116,7 @@ const back = `<section class="card back">
     <p class="sub">${CARD.sub.replace('&', '&amp;')}</p>
     <p class="tag">${CARD.tagline}</p>
   </div>
-  <div class="uae-flag"><svg viewBox="0 0 60 38">${flagShapes('ae', 0, 0, 60, 38)}<rect width="60" height="38" fill="url(#fs)"/><defs><linearGradient id="fs" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset=".5" stop-color="#000" stop-opacity=".15"/><stop offset="1" stop-color="#fff" stop-opacity=".2"/></linearGradient></defs></svg></div>
+  <div class="uae-flag"><svg viewBox="0 0 60 40"><defs><clipPath id="wave"><path d="M0 4 C15 0 30 8 45 3 S60 2 60 2 V36 C45 41 30 33 15 38 S0 38 0 38 Z"/></clipPath><linearGradient id="fs" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".35" stop-color="#000" stop-opacity=".18"/><stop offset=".7" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#000" stop-opacity=".15"/></linearGradient></defs><g clip-path="url(#wave)">${flagShapes('ae', 0, 0, 60, 40).replace(/stroke="[^"]*"/, 'stroke="none"')}<rect width="60" height="40" fill="url(#fs)"/></g></svg></div>
   <div class="person">
     <h1>${t3d(CARD.person, 'pname')}</h1>
     <p class="role">${CARD.role}</p>
@@ -151,14 +152,10 @@ body { font-family: "Plus Jakarta Sans", Arial, sans-serif; -webkit-print-color-
 .t3d.name::before { color: #0a1430; text-shadow: 0 .12mm 0 #3c5bb8, 0 .24mm 0 #2f4a9b, 0 .36mm 0 #233a7d, 0 .48mm 0 #18295c, 0 .9mm .9mm rgba(0,0,0,.6); }
 
 /* 3D emblem */
-.emb { position: relative; width: var(--s); height: var(--s); display: grid; place-items: center; }
-.emb-ring { position: absolute; inset: -2.2mm; border-radius: 50%; border: .35mm solid transparent;
-  background: linear-gradient(#0000, #0000) padding-box, conic-gradient(from 200deg, #e8bd66, #3d6bff, #8aa8ff, #e8bd66, #b17a22, #e8bd66) border-box;
-  -webkit-mask: linear-gradient(#000 0 0) padding-box exclude, linear-gradient(#000 0 0) border-box; mask: linear-gradient(#000 0 0) padding-box exclude, linear-gradient(#000 0 0) border-box; opacity: .9; }
-.emb-tile { position: relative; width: 100%; height: 100%; border-radius: 28%; overflow: hidden; display: grid; place-items: center;
-  background: linear-gradient(150deg, #2a4597 0%, #142a6b 45%, #0a1430 100%);
-  box-shadow: inset 0 .25mm 0 rgba(255,255,255,.45), inset 0 0 0 .25mm rgba(232,189,102,.75), inset 0 -2mm 3mm rgba(0,0,0,.45), 0 1.4mm 0 #070d22, 0 1.6mm 0 rgba(232,189,102,.4), 0 3mm 4mm rgba(0,0,0,.6); }
-.emb-gloss { position: absolute; left: 7%; right: 7%; top: 4%; height: 46%; border-radius: 30% 30% 50% 50%; background: linear-gradient(180deg, rgba(255,255,255,.32), rgba(255,255,255,0)); }
+.emb { position: relative; width: var(--s); height: var(--s); }
+.emb-glow { position: absolute; inset: -3mm; border-radius: 50%; background: radial-gradient(circle, rgba(61,140,255,.45), rgba(61,107,255,0) 68%); }
+.emb-logo { position: relative; width: 100%; height: 100%; display: block; border-radius: 50%; box-shadow: 0 0 0 .3mm rgba(232,189,102,.55), 0 1.2mm 0 #070d22, 0 1.4mm 0 rgba(232,189,102,.35), 0 2.6mm 3.5mm rgba(0,0,0,.65); }
+.emb-gloss { position: absolute; left: 14%; right: 14%; top: 5%; height: 40%; border-radius: 50% 50% 45% 45%; background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0)); }
 .emb .t3d { font-weight: 800; font-size: calc(var(--s) * .44); letter-spacing: -.02em; line-height: 1; }
 
 .tile { width: 3.6mm; height: 3.6mm; border-radius: 1mm; flex: none; display: grid; place-items: center; position: relative; overflow: hidden; color: #fff;
@@ -170,7 +167,7 @@ body { font-family: "Plus Jakarta Sans", Arial, sans-serif; -webkit-print-color-
 
 /* front */
 .brand { position: absolute; left: 7.5mm; top: 8.5mm; width: 40mm; display: flex; flex-direction: column; align-items: flex-start; }
-.brand .emb { margin: 2.2mm 0 0 2.2mm; }
+.brand .emb { margin: 1mm 0 0 1.5mm; }
 .brand h1 { margin-top: 4.6mm; font-size: 4.25mm; font-weight: 800; letter-spacing: .01em; line-height: 1.1; }
 .sub { margin-top: 1mm; font-size: 1.72mm; font-weight: 700; letter-spacing: .07em; color: #e8bd66; line-height: 1.25; }
 .tag { margin-top: 1.6mm; padding-top: 1.4mm; border-top: .2mm solid rgba(232,189,102,.45); font-size: 1.85mm; font-weight: 500; color: rgba(225,232,250,.85); }
@@ -193,11 +190,11 @@ body { font-family: "Plus Jakarta Sans", Arial, sans-serif; -webkit-print-color-
   background: linear-gradient(160deg, rgba(23,44,104,.92), rgba(8,14,34,.94)); clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%);
   box-shadow: inset -.3mm 0 0 rgba(232,189,102,.5); }
 .back::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 40.6mm; background: linear-gradient(180deg, #e8bd66, #3d6bff); clip-path: polygon(99% 0, 100% 0, 86.6% 100%, 85.6% 100%); }
-.side .emb { margin: 2mm 0 0 2mm; }
+.side .emb { margin: 1mm 0 0 1.5mm; }
 .side h3 { margin-top: 4.4mm; font-size: 3.3mm; font-weight: 800; line-height: 1.1; }
 .side .sub { font-size: 1.55mm; max-width: 27mm; }
 .side .tag { font-size: 1.55mm; max-width: 30mm; }
-.uae-flag { position: absolute; right: 6.5mm; top: 7mm; width: 9mm; height: 5.7mm; border-radius: .5mm; overflow: hidden; transform: perspective(20mm) rotateY(-18deg); box-shadow: 0 .8mm 1.5mm rgba(0,0,0,.6); }
+.uae-flag { position: absolute; right: 6.5mm; top: 6.5mm; width: 7mm; height: 4.7mm; opacity: .55; transform: perspective(20mm) rotateY(-20deg) rotate(-4deg); filter: drop-shadow(0 .5mm .8mm rgba(0,0,0,.5)); }
 .uae-flag svg { width: 100%; height: 100%; display: block; }
 .person { position: absolute; left: 44.5mm; top: 13mm; right: 6.5mm; }
 .person h1 { font-size: 4.9mm; font-weight: 800; letter-spacing: .02em; line-height: 1.15; }
