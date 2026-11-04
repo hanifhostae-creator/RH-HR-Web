@@ -43,5 +43,7 @@ Conventions: vanilla ES5-style JS (no modules), escape user text with `esc()`, k
 `short`, `summary`, `text`, `points[]`, `tags[]`, `visual`), `projects`, `sourcing`
 (`africa[]`/`asia[]` as `[flagCode, name, lon, lat]`), `emirates`, `destinations`.
 
+Text fields `summary` (services) and `text` (recruitmentItems) may contain `**word**` to highlight words; render with `hl()`, strip with `plain()`.
+
 Do not rename keys without updating both the front end and the admin panel.
 Forms currently open the visitor's email app (`mailto:`); the back end will replace this.

@@ -9,6 +9,8 @@
 
   /* ---------- helpers ---------- */
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function hl(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<mark>$1</mark>'); }
+  function plain(s) { return String(s == null ? '' : s).replace(/\*\*/g, ''); }
   function svc(id) { return S.services.filter(function (x) { return x.id === id; })[0]; }
   function svcUrl(x) { return 'service.html?id=' + encodeURIComponent(x.id); }
   function tel() { return 'tel:' + C.phone.replace(/[^+\d]/g, ''); }
@@ -30,7 +32,7 @@
   /* ---------- header ---------- */
   function header() {
     var drop = '<div class="dd"><div class="dd-col"><h6>Recruitment & HR</h6>' + group('recruitment').map(ddItem).join('') + '</div><div class="dd-col"><h6>Business & Digital</h6>' + group('business').map(ddItem).join('') + '</div><a class="dd-all" href="services.html">View all services ' + arrow() + '</a></div>';
-    function ddItem(x) { return '<a href="' + svcUrl(x) + '"><i>' + I(x.icon) + '</i><span><b>' + esc(x.short) + '</b><small>' + esc(x.summary) + '</small></span></a>'; }
+    function ddItem(x) { return '<a href="' + svcUrl(x) + '"><i>' + I(x.icon) + '</i><span><b>' + esc(x.short) + '</b><small>' + esc(plain(x.summary)) + '</small></span></a>'; }
     var links = S.nav.map(function (n) {
       var on = n.page === page || (page === 'service' && n.page === 'services');
       if (n.dropdown) return '<div class="has-dd"><a href="' + n.href + '" class="' + (on ? 'on' : '') + '">' + esc(n.label) + I('chevron', 'ic-xs') + '</a>' + drop + '</div>';
@@ -47,10 +49,12 @@
   function footer() {
     return '<footer class="site-footer"><div class="wrap">' +
       '<div class="f-cta reveal"><div><span class="eyebrow light">Get started</span><h3>Ready to hire or plan a trip?</h3><p>Talk to our team today — we reply quickly.</p></div><div class="f-cta-b">' + btn('hire-staff.html', 'Hire Staff', 'btn-gold') + btn('partner-with-us.html', 'Partner With Us', 'btn-outline-light', false) + '</div></div>' +
-      '<div class="f-grid"><div class="f-about"><a class="brand light" href="index.html"><span class="mark">' + logoMark() + '</span><span class="brand-t"><b>' + esc(C.short) + '</b><small>' + esc(C.sub) + '</small></span></a><p>' + esc(C.footer) + '</p><div class="f-tags"><span>Recruitment</span><span>HR Solutions</span><span>Travel & Tour</span><span>Business Setup</span></div></div>' +
-      '<div><h5>Company</h5><a href="index.html">Home</a><a href="about.html">About Us</a><a href="portfolio.html">Portfolio</a><a href="hire-staff.html">Hire Staff</a><a href="partner-with-us.html">Partner With Us</a><a href="contact.html">Contact Us</a></div>' +
-      '<div><h5>Services</h5>' + S.services.map(function (x) { return '<a href="' + svcUrl(x) + '">' + esc(x.short) + '</a>'; }).join('') + '</div>' +
-      '<div><h5>Get in touch</h5><a class="f-ct" href="' + tel() + '">' + I('phone') + '<span>' + esc(C.phone) + '</span></a><a class="f-ct" href="mailto:' + esc(C.email) + '">' + I('mail') + '<span>' + esc(C.email) + '</span></a><div class="f-ct">' + I('pin') + '<span>' + esc(C.address) + '</span></div></div></div>' +
+      '<div class="f-grid"><div class="f-brand"><a class="brand light f-logo" href="index.html"><span class="mark mark-lg">' + logoMark() + '</span><span class="brand-t"><b>' + esc(C.short) + '</b><small>' + esc(C.sub) + '</small></span></a><p>' + esc(C.footer) + '</p>' +
+        '<div class="f-quick"><a href="' + tel() + '" aria-label="Call us">' + I('phone') + '</a><a href="mailto:' + esc(C.email) + '" aria-label="Email us">' + I('mail') + '</a><a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Mai Tower, Al Nahda 1, Dubai') + '" target="_blank" rel="noopener" aria-label="Find us on the map">' + I('pin') + '</a></div>' +
+        '<div class="f-tags"><span>' + I('users', 'ic-xs') + 'Recruitment</span><span>' + I('briefcase', 'ic-xs') + 'HR Solutions</span><span>' + I('plane', 'ic-xs') + 'Travel & Tour</span><span>' + I('building', 'ic-xs') + 'Business Setup</span></div></div>' +
+      '<div class="f-col"><h5>Company</h5>' + [['index.html', 'Home', 'dashboard'], ['about.html', 'About Us', 'building'], ['portfolio.html', 'Portfolio', 'award'], ['hire-staff.html', 'Hire Staff', 'users'], ['partner-with-us.html', 'Partner With Us', 'link'], ['contact.html', 'Contact Us', 'phone']].map(function (l) { return '<a class="f-link" href="' + l[0] + '"><i>' + I(l[2]) + '</i>' + l[1] + '</a>'; }).join('') + '</div>' +
+      '<div class="f-col"><h5>Services</h5>' + S.services.map(function (x) { return '<a class="f-link" href="' + svcUrl(x) + '"><i>' + I(x.icon) + '</i>' + esc(x.short) + '</a>'; }).join('') + '</div>' +
+      '<div class="f-col"><h5>Get in touch</h5><a class="f-ct" href="' + tel() + '"><i>' + I('phone') + '</i><span><small>Call us</small>' + esc(C.phone) + '</span></a><a class="f-ct" href="mailto:' + esc(C.email) + '"><i>' + I('mail') + '</i><span><small>Email</small>' + esc(C.email) + '</span></a><div class="f-ct"><i>' + I('pin') + '</i><span><small>Office</small>' + esc(C.address) + '</span></div></div></div>' +
       '<div class="f-bottom"><span>' + esc(C.copyright) + '</span><a href="#top" id="totop">Back to top ↑</a></div></div></footer>';
   }
 
@@ -113,12 +117,22 @@
 
   /* ---------- reusable blocks ---------- */
   function svcCard(x, withTags) {
-    return '<a class="card svc-card reveal" href="' + svcUrl(x) + '"><i class="tile">' + I(x.icon) + '</i><h3>' + esc(x.name) + '</h3><p>' + esc(x.summary) + '</p>' + (withTags && x.tags ? '<div class="tags">' + x.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' : '') + '<span class="more">Learn more ' + arrow() + '</span></a>';
+    return '<a class="card svc-card reveal" href="' + svcUrl(x) + '"><span class="svc-top"><i class="tile">' + I(x.icon) + '</i><span class="svc-badge">' + (x.group === 'recruitment' ? 'Recruitment & HR' : 'Business & Digital') + '</span></span><h3>' + esc(x.name) + '</h3><p>' + hl(x.summary) + '</p>' +
+      (withTags && x.tags ? '<div class="tags">' + x.tags.map(function (t) { return '<span>' + I('check', 'ic-xs') + esc(t) + '</span>'; }).join('') + '</div>' : '') +
+      '<span class="svc-foot"><span class="more">Learn more</span><i class="go">' + arrow() + '</i></span><i class="wm" aria-hidden="true">' + I(x.icon) + '</i></a>';
   }
   function audience() {
-    return '<section class="section pt-0"><div class="wrap aud">' +
-      '<a class="aud-card dark reveal" href="hire-staff.html"><span class="eyebrow light">For companies</span><h3>Need workers? We supply them.</h3><p>Tell us the roles and numbers. We supply skilled and unskilled manpower from inside and outside the UAE.</p><span class="btn btn-gold">Hire Manpower' + arrow() + '</span><i class="aud-ic">' + I('users') + '</i></a>' +
-      '<a class="aud-card light reveal" href="partner-with-us.html"><span class="eyebrow">For recruitment agents</span><h3>Have candidates? Partner with us.</h3><p>Agents and agencies with ready candidates — we place them with companies in the UAE.</p><span class="btn btn-primary">Become a Partner' + arrow() + '</span><i class="aud-ic">' + I('link') + '</i></a></div></section>';
+    var flags = ['pk', 'in', 'np', 'bd', 'lk', 'ph', 'ng', 'ke', 'gh', 'ug', 'et', 'eg'];
+    return '<section class="section aud-sec"><div class="wrap aud">' +
+      '<a class="aud-card aud-co reveal" href="hire-staff.html"><div class="aud-head"><i class="tile gold">' + I('users') + '</i><span class="eyebrow light">For companies</span></div>' +
+      '<h3>Need workers? We <em class="hl">supply</em> them.</h3><p>Tell us the roles and numbers. We supply <mark>skilled and unskilled manpower</mark> from inside and outside the UAE.</p>' +
+      '<div class="aud-vis">' + [['idcard', 'Skilled workers', 'Technical & trade roles', 'ok', 'Ready'], ['hardhat', 'Unskilled workers', 'Labour & support staff', 'ok', 'Ready'], ['users', 'Bulk teams', 'Inside UAE or overseas', 'info', 'On request']].map(function (r) { return '<div class="aud-row"><i>' + I(r[0]) + '</i><span><b>' + r[1] + '</b><small>' + r[2] + '</small></span><em class="chip ' + r[3] + '">' + r[4] + '</em></div>'; }).join('') + '</div>' +
+      '<div class="aud-cta"><span class="btn btn-gold">Hire Manpower' + arrow() + '</span><span class="aud-pts">' + I('shield', 'ic-xs') + 'Visa & joining handled</span></div><i class="aud-wm" aria-hidden="true">' + I('users') + '</i></a>' +
+      '<a class="aud-card aud-ag reveal" href="partner-with-us.html"><div class="aud-head"><i class="tile">' + I('link') + '</i><span class="eyebrow">For recruitment agents</span></div>' +
+      '<h3>Have candidates? <em class="hl blue">Partner</em> with us.</h3><p>Agents and agencies with ready candidates — we place them with <mark>companies in the UAE</mark>.</p>' +
+      '<div class="aud-vis"><div class="aud-route"><div class="aud-flags">' + flags.map(function (c) { return window.flag(c); }).join('') + '</div><span class="aud-arrow"><i></i>' + I('plane', 'ic-sm') + '</span><span class="aud-uae">' + window.flag('ae') + '<b>UAE</b></span></div><small class="aud-cap">Candidates from ' + (S.sourcing.africa.length + S.sourcing.asia.length) + ' countries across Africa & Asia</small></div>' +
+      '<div class="aud-steps">' + [['send', 'Send details'], ['clipboard', 'We review'], ['briefcase', 'Start placing']].map(function (st, i) { return '<div><i>' + I(st[0]) + '</i><b>' + st[1] + '</b><small>Step ' + (i + 1) + '</small></div>'; }).join('') + '</div>' +
+      '<div class="aud-cta"><span class="btn btn-primary">Become a Partner' + arrow() + '</span><span class="aud-pts">' + I('check', 'ic-xs') + 'Simple partnership process</span></div><i class="aud-wm" aria-hidden="true">' + I('link') + '</i></a></div></section>';
   }
   function steps(list, dark) {
     return '<div class="steps' + (dark ? ' dark' : '') + '">' + list.map(function (s, i) { return '<div class="step reveal"><span class="num">0' + (i + 1) + '</span><h3>' + esc(s.title) + '</h3><p>' + esc(s.text) + '</p></div>'; }).join('') + '</div>';
@@ -145,13 +159,12 @@
 '<div class="float-card fc1"><i>' + I('users') + '</i><span><b>Bulk hiring</b><small>Skilled & unskilled</small></span></div>' +
       '<div class="float-card fc2"><i>' + I('shield') + '</i><span><b>Compliant</b><small>Visa & documents</small></span></div></div></div></section>' +
 
-      '<section class="stats-wrap"><div class="wrap"><div class="stats reveal">' + S.stats.map(function (s) { return '<div><b>' + esc(s.value) + '</b><span>' + esc(s.label) + '</span></div>'; }).join('') + '</div></div></section>' +
 
       audience() +
 
       '<section class="section" id="services"><div class="wrap">' + head('Our main service', 'Recruitment & HR Solutions', 'Hiring is the heart of our company. We supply skilled and unskilled workers to companies, one by one or in bulk, from inside and outside the UAE.', true) +
       '<div class="grid g3">' + ['inside-recruitment', 'outside-recruitment', 'hr-solution'].map(function (id) { return svcCard(svc(id), true); }).join('') + '</div>' +
-      '<div class="offer reveal"><div class="offer-h"><h3>Everything we offer for hiring</h3><a href="service.html?id=recruitment" class="link">Recruitment services ' + arrow() + '</a></div><div class="offer-grid">' + S.recruitmentItems.map(function (r) { return '<div class="oi"><i>' + I(r.icon) + '</i><span><b>' + esc(r.title) + '</b><small>' + esc(r.text) + '</small></span></div>'; }).join('') + '</div></div></div></section>' +
+      '<div class="offer reveal"><div class="offer-h"><h3>Everything we offer for hiring</h3><a href="service.html?id=recruitment" class="link">Recruitment services ' + arrow() + '</a></div><div class="offer-grid">' + S.recruitmentItems.map(function (r) { return '<div class="oi"><i class="tile sm">' + I(r.icon) + '</i><span><b>' + esc(r.title) + '</b><small>' + hl(r.text) + '</small></span></div>'; }).join('') + '</div></div></div></section>' +
 
       '<section class="section dark"><div class="wrap">' + head('How hiring works', 'From requirement to first working day', 'A clear, managed process — you stay informed at every step.', true).replace('sec-head', 'sec-head on-dark') + steps(S.hiringSteps, true) + '</div></section>' +
 

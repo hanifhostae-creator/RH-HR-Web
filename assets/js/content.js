@@ -52,18 +52,18 @@ window.SITE = {
   ],
 
   recruitmentItems: [
-    { icon: "pin", title: "Inside Recruitment", text: "Ready candidates from inside the UAE." },
-    { icon: "globe", title: "Outside Recruitment", text: "Hiring from overseas for your company." },
-    { icon: "users", title: "Bulk Manpower Supply", text: "Large teams supplied to companies." },
-    { icon: "idcard", title: "Skilled Workers", text: "Trained staff for technical roles." },
-    { icon: "hardhat", title: "Unskilled Workers", text: "Labour and support staff on demand." },
-    { icon: "clipboard", title: "Screening & Interviews", text: "We shortlist the best candidates." },
-    { icon: "passport", title: "Visa Processing", text: "Work visa and permit handling." },
-    { icon: "plane", title: "Travel & Joining", text: "Tickets, arrival and joining support." },
-    { icon: "file", title: "Documentation", text: "Contracts and staff paperwork." },
-    { icon: "wallet", title: "Payroll & Records", text: "Salary processing and staff files." },
-    { icon: "cap", title: "Training & Onboarding", text: "Get new staff ready for the job." },
-    { icon: "shield", title: "HR Policy & Compliance", text: "Keep your team within the rules." }
+    { icon: "pin", title: "Inside Recruitment", text: "Ready candidates from **inside the UAE**." },
+    { icon: "globe", title: "Outside Recruitment", text: "Hiring **from overseas** for your company." },
+    { icon: "users", title: "Bulk Manpower Supply", text: "**Large teams** supplied to companies." },
+    { icon: "idcard", title: "Skilled Workers", text: "**Trained staff** for technical roles." },
+    { icon: "hardhat", title: "Unskilled Workers", text: "Labour and support staff **on demand**." },
+    { icon: "clipboard", title: "Screening & Interviews", text: "We shortlist **the best candidates**." },
+    { icon: "passport", title: "Visa Processing", text: "**Work visa** and permit handling." },
+    { icon: "plane", title: "Travel & Joining", text: "Tickets, arrival and **joining support**." },
+    { icon: "file", title: "Documentation", text: "**Contracts** and staff paperwork." },
+    { icon: "wallet", title: "Payroll & Records", text: "**Salary processing** and staff files." },
+    { icon: "cap", title: "Training & Onboarding", text: "Get new staff **ready for the job**." },
+    { icon: "shield", title: "HR Policy & Compliance", text: "Keep your team **within the rules**." }
   ],
 
   process: [
@@ -84,7 +84,7 @@ window.SITE = {
     {
       id: "recruitment", group: "recruitment", icon: "users",
       name: "Recruitment Services", short: "Recruitment",
-      summary: "Skilled and unskilled workers for companies — inside the UAE and from overseas, one by one or in bulk.",
+      summary: "Skilled and unskilled workers for companies — **inside the UAE and from overseas**, one by one or in bulk.",
       text: "Our main service. We supply skilled and unskilled workers to companies, from inside the UAE and from outside, one by one or in bulk.",
       points: ["Inside recruitment from candidates in the UAE", "Outside recruitment for bulk hiring from overseas", "Skilled and unskilled workers for companies", "Screening, interviews and shortlisting", "Visa, travel and joining support"],
       visual: "network"
@@ -92,7 +92,7 @@ window.SITE = {
     {
       id: "inside-recruitment", group: "recruitment", icon: "pin",
       name: "Inside Recruitment", short: "Inside Recruitment",
-      summary: "Candidates already living in the UAE, screened and ready to join your company quickly.",
+      summary: "Candidates already living in the UAE, **screened and ready** to join your company quickly.",
       text: "Candidates already living in the UAE, screened and ready to start. Fast placement for companies that need staff now.",
       points: ["Ready-to-join candidates already in the UAE", "Skilled and unskilled workers", "Fast shortlisting and interviews", "Visa status and document checks", "Quick placement for your company"],
       tags: ["Skilled", "Unskilled", "Quick placement"],
@@ -101,7 +101,7 @@ window.SITE = {
     {
       id: "outside-recruitment", group: "recruitment", icon: "globe",
       name: "Outside Recruitment", short: "Outside Recruitment",
-      summary: "Bulk hiring from overseas. We handle selection, visas and travel for your new workforce.",
+      summary: "**Bulk hiring from overseas.** We handle selection, visas and travel for your new workforce.",
       text: "Bulk hiring from overseas. We find, screen and send workers from African and Asian countries to the UAE for your company.",
       points: ["Bulk hiring for companies from overseas", "Candidates from African and Asian countries", "Selection, interviews and skill checks", "Work visa and entry permit processing", "Travel, arrival and joining support"],
       tags: ["Bulk hiring", "Overseas", "Visa support"],
@@ -110,7 +110,7 @@ window.SITE = {
     {
       id: "hr-solution", group: "recruitment", icon: "briefcase",
       name: "HR Solutions", short: "HR Solutions",
-      summary: "Payroll, staff records, policies and team management for your company.",
+      summary: "**Payroll, staff records**, policies and team management for your company.",
       text: "We help companies hire the right people, skilled and unskilled, and manage their teams with less effort.",
       points: ["Recruitment of skilled and unskilled workers", "Candidate screening and shortlisting", "Visa and onboarding support", "Payroll and staff records", "HR policy and team management"],
       tags: ["Payroll", "Policies", "Onboarding"],
@@ -119,7 +119,7 @@ window.SITE = {
     {
       id: "travel-tour", group: "business", icon: "plane",
       name: "Travel & Tour", short: "Travel & Tour",
-      summary: "Visit visas for Saudi Arabia, Europe, the USA and Asia — plus flights and hotels.",
+      summary: "Visit visas for **Saudi Arabia, Europe, the USA and Asia** — plus flights and hotels.",
       text: "We arrange visit visas for Saudi Arabia, European countries, the USA and Asian countries, and book your flight tickets.",
       points: ["Visit visa for Saudi Arabia", "Visit visa for European countries", "Visit visa for the USA", "Visit visa for Asian countries", "Flight ticket booking", "Hotel booking", "Travel documents and guidance"],
       visual: "travel"
@@ -127,7 +127,7 @@ window.SITE = {
     {
       id: "business-setup", group: "business", icon: "building",
       name: "Business Setup & Company Formation", short: "Business Setup",
-      summary: "Trade licence, visas, legal structure and bank setup — handled start to finish.",
+      summary: "Trade licence, visas, legal structure and bank setup — **handled start to finish**.",
       text: "Start your company in the UAE with a partner who handles the paperwork. We guide you from trade licence to visa so you can focus on the business.",
       points: ["Company registration and trade licence", "Visa processing for owners and staff", "Choosing the right legal structure", "Full compliance with local regulations", "Bank account and accounting setup support"],
       visual: "setup"
@@ -135,7 +135,7 @@ window.SITE = {
     {
       id: "web-development", group: "business", icon: "code",
       name: "Web Development", short: "Development",
-      summary: "Fast, modern websites built around your brand — from business sites to custom platforms.",
+      summary: "**Fast, modern websites** built around your brand — from business sites to custom platforms.",
       text: "We design and build fast, modern websites made around your brand, from simple business sites to custom web platforms.",
       points: ["Custom website design", "Responsive mobile-first development", "Landing pages and business portals", "Speed, security and clean code", "Ongoing updates and support"],
       visual: "web"
@@ -143,7 +143,7 @@ window.SITE = {
     {
       id: "seo-digital-marketing", group: "business", icon: "trending",
       name: "SEO & Digital Marketing", short: "Marketing",
-      summary: "Get found online and turn visitors into customers with steady, measurable growth.",
+      summary: "Get found online and **turn visitors into customers** with steady, measurable growth.",
       text: "Get found online and turn visitors into customers. Our marketing plans increase your visibility and bring steady growth.",
       points: ["Search engine optimisation", "Social media marketing", "Paid ads on Google and social platforms", "Content and brand campaigns", "Monthly performance reports"],
       visual: "chart"
@@ -151,7 +151,7 @@ window.SITE = {
     {
       id: "management", group: "business", icon: "dashboard",
       name: "Website & Social Management", short: "Management",
-      summary: "Daily care of your websites and social accounts — updated, secure and working well.",
+      summary: "Daily care of your websites and social accounts — **updated, secure** and working well.",
       text: "We look after your websites and social accounts every day, so everything stays updated, secure and working well.",
       points: ["Website maintenance and troubleshooting", "Social media account management", "Regular content updates", "Security checks and backups", "Quick response when something breaks"],
       visual: "manage"
@@ -159,7 +159,7 @@ window.SITE = {
     {
       id: "e-commerce", group: "business", icon: "cart",
       name: "E-Commerce", short: "E-Commerce",
-      summary: "Online stores with products, payments and orders managed in one place.",
+      summary: "Online stores with **products, payments and orders** managed in one place.",
       text: "Sell online with a store that is simple for customers and easy for you to run, with payments, products and orders in one place.",
       points: ["Online store design and setup", "Product and inventory management", "Secure payment gateway integration", "Order and delivery workflow", "Marketing tools to grow sales"],
       visual: "shop"
