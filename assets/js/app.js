@@ -90,7 +90,7 @@
 
   function visual(x) {
     var v = x.visual;
-    if (v === 'world' || v === 'network') return '<div class="vis-card map-card">' + mapHead('Global talent pipeline', '18 source countries') + worldMap(false) + '</div>';
+    if (v === 'world' || v === 'network') return '<div class="vis-card map-card">' + mapHead('Global talent pipeline', '40 source countries') + worldMap(false) + '</div>';
     if (v === 'uae') return '<div class="vis-card map-card">' + mapHead('Local hiring network', '7 Emirates') + uaeMap() + '</div>';
     if (v === 'travel') return boardingPass();
     if (v === 'hr') return '<div class="vis-card mock"><div class="mk-h"><b>Team overview</b><span class="chip ok">Payroll ready</span></div>' + [['AK', 'Site Supervisor', 'Joined'], ['MS', 'Electrician', 'Visa issued'], ['RN', 'Driver', 'Screening'], ['JO', 'Cleaner', 'Joined']].map(function (r, i) { return '<div class="mk-row"><i class="av a' + i + '">' + r[0] + '</i><span><b>' + r[1] + '</b><small>Staff record · Contract on file</small></span><em class="chip ' + (r[2] === 'Joined' ? 'ok' : r[2] === 'Screening' ? 'wait' : 'info') + '">' + r[2] + '</em></div>'; }).join('') + '</div>';
@@ -155,7 +155,7 @@
 
       '<section class="section dark"><div class="wrap">' + head('How hiring works', 'From requirement to first working day', 'A clear, managed process — you stay informed at every step.', true).replace('sec-head', 'sec-head on-dark') + steps(S.hiringSteps, true) + '</div></section>' +
 
-      '<section class="section" id="about"><div class="wrap split"><div class="reveal"><span class="eyebrow">About our company</span><h2>' + esc(C.name) + '</h2><p class="lead-d">We are a recruitment and HR solutions company based in Dubai. We supply skilled and unskilled workers to companies in bulk, from inside and outside the UAE — and help with company setup, development and marketing.</p>' + ticks(['One partner for hiring, visas, travel and setup', 'Candidates from 18+ countries across Africa & Asia', 'Office in Al Nahda 1, Dubai']) + btn('about.html', 'More about us', 'btn-primary') + '</div>' +
+      '<section class="section" id="about"><div class="wrap split"><div class="reveal"><span class="eyebrow">About our company</span><h2>' + esc(C.name) + '</h2><p class="lead-d">We are a recruitment and HR solutions company based in Dubai. We supply skilled and unskilled workers to companies in bulk, from inside and outside the UAE — and help with company setup, development and marketing.</p>' + ticks(['One partner for hiring, visas, travel and setup', 'Candidates from 40 countries across Africa & Asia', 'Office in Al Nahda 1, Dubai']) + btn('about.html', 'More about us', 'btn-primary') + '</div>' +
       '<div class="about-vis reveal"><div class="av-main"><span class="q">“</span><p>Our aim is to give every client modern, optimised services and a partner they can trust.</p><div class="av-by"><span class="mark">' + logoMark() + '</span><span><b>' + esc(C.short) + '</b><small>' + esc(C.city) + '</small></span></div></div><div class="av-mini">' + [['target', 'Focused', 'on results'], ['clock', 'Fast', 'placement'], ['heart', 'Trusted', 'partner']].map(function (a) { return '<div><i>' + I(a[0]) + '</i><b>' + a[1] + '</b><small>' + a[2] + '</small></div>'; }).join('') + '</div></div></div></section>' +
 
       '<section class="section soft" id="travel"><div class="wrap split"><div class="reveal">' + boardingPass() + '</div><div class="reveal"><span class="eyebrow">Travel & Tour</span><h2>Visit visas and flight tickets</h2><p class="lead-d">We also run a travel and tour service. We arrange visit visas for many countries and book your tickets, so your journey is simple from start to finish.</p>' + ticks(['Visit visa for Saudi Arabia', 'Visit visa for European countries', 'Visit visa for the USA', 'Visit visa for Asian countries', 'Flight ticket booking', 'Hotel booking'], 'two') + btn('service.html?id=travel-tour', 'Explore Travel & Tour', 'btn-primary') + '</div></div>' +
@@ -173,7 +173,7 @@
 
   function about() {
     return pageHero('About us', C.name, 'A recruitment and HR solutions company based in Dubai, with business setup, travel, development and marketing services alongside.', [['About Us']]) +
-      '<section class="section"><div class="wrap split"><div class="reveal"><span class="eyebrow">Who we are</span><h2>We turn ideas into successful businesses</h2><p class="lead-d">We are a recruitment and HR solutions company based in Dubai. We supply skilled and unskilled workers to companies — one by one or in bulk — from inside the UAE and from African and Asian countries.</p><p class="lead-d">Alongside hiring, we help clients set up companies, arrange visit visas and travel, and grow online through development, e-commerce and marketing. Our aim is to give every client modern, optimised services and a partner they can trust.</p>' + btn('contact.html', 'Talk to our team', 'btn-primary') + '</div><div class="reveal"><div class="vis-card map-card">' + mapHead('Where our candidates come from', '18+ countries') + worldMap(false) + '</div></div></div></section>' +
+      '<section class="section"><div class="wrap split"><div class="reveal"><span class="eyebrow">Who we are</span><h2>We turn ideas into successful businesses</h2><p class="lead-d">We are a recruitment and HR solutions company based in Dubai. We supply skilled and unskilled workers to companies — one by one or in bulk — from inside the UAE and from African and Asian countries.</p><p class="lead-d">Alongside hiring, we help clients set up companies, arrange visit visas and travel, and grow online through development, e-commerce and marketing. Our aim is to give every client modern, optimised services and a partner they can trust.</p>' + btn('contact.html', 'Talk to our team', 'btn-primary') + '</div><div class="reveal"><div class="vis-card map-card">' + mapHead('Where our candidates come from', '40 countries') + worldMap(false) + '</div></div></div></section>' +
       '<section class="section soft"><div class="wrap">' + head('What we stand for', 'Values behind every placement', '', true) + '<div class="grid g4">' + [['target', 'Right fit', 'We match roles to real skills, not just CVs.'], ['clock', 'Speed', 'Fast shortlisting and quick placement.'], ['shield', 'Compliance', 'Visas, permits and documents done properly.'], ['heart', 'Partnership', 'One trusted team for all your business needs.']].map(function (v) { return '<div class="card value reveal"><i class="tile">' + I(v[0]) + '</i><h3>' + v[1] + '</h3><p>' + v[2] + '</p></div>'; }).join('') + '</div></div></section>' +
       '<section class="section"><div class="wrap">' + head('What we offer', 'Everything your business needs', '', true) + '<div class="grid g3">' + S.services.map(function (x) { return svcCard(x); }).join('') + '</div></div></section>';
   }
@@ -258,7 +258,7 @@
   mount();
   if (!document.querySelector('.bg-fx')) {
     var fx = document.createElement('div'); fx.className = 'bg-fx'; fx.setAttribute('aria-hidden', 'true');
-    fx.innerHTML = '<div class="aurora au1"></div><div class="aurora au2"></div><div class="aurora au3"></div><div class="grid-l"></div><canvas id="fxc"></canvas><div class="fx-icons">' + ['users', 'idcard', 'briefcase', 'passport', 'clipboard', 'globe', 'plane', 'cap', 'hardhat', 'file', 'wallet', 'shield', 'users', 'idcard', 'briefcase', 'clipboard'].map(function (k, i) { return '<span style="left:' + ((i * 6.3 + (i % 3) * 7) % 94) + '%;top:' + ((i * 37 + 8) % 90) + '%;--s:' + (34 + (i % 4) * 16) + 'px;--d:' + (16 + (i % 5) * 5) + 's;animation-delay:-' + i * 2.3 + 's">' + I(k) + '</span>'; }).join('') + '</div><div class="vig"></div>';
+    fx.innerHTML = '<div class="aurora au1"></div><div class="aurora au2"></div><div class="aurora au3"></div><div class="grid-l"></div><div class="beam"></div><div class="beam b2"></div><canvas id="fxc"></canvas><div class="fx-icons">' + ['users', 'idcard', 'briefcase', 'passport', 'clipboard', 'globe', 'plane', 'cap', 'hardhat', 'file', 'wallet', 'shield', 'users', 'idcard', 'briefcase', 'clipboard'].map(function (k, i) { return '<span style="left:' + ((i * 6.3 + (i % 3) * 7) % 94) + '%;top:' + ((i * 37 + 8) % 90) + '%;--s:' + (34 + (i % 4) * 16) + 'px;--d:' + (16 + (i % 5) * 5) + 's;animation-delay:-' + i * 2.3 + 's">' + I(k) + '</span>'; }).join('') + '</div><div class="vig"></div>';
     document.body.insertBefore(fx, document.body.firstChild);
     network(document.getElementById('fxc'));
   }
@@ -370,16 +370,57 @@
   }
   bind();
 
-  /* Hero background: full-width map with planes flying from each sourcing country to the UAE */
+  /* Hero background: dotted map of Africa, Arabia & Asia with planes flying from every sourcing country to the UAE */
+  function getLand() { return [
+    [[-17, 21], [-16, 28], [-10, 30], [-6, 36], [3, 37], [10, 37], [11, 33], [15, 32], [20, 31], [25, 32], [32, 31], [34, 28], [37, 22], [39, 15], [43, 12], [51, 12], [49, 7], [44, 2], [40, -3], [40, -11], [36, -18], [35, -24], [32, -29], [27, -34], [19, -35], [17, -29], [12, -17], [13, -6], [9, -1], [9, 4], [4, 6], [-3, 5], [-8, 4], [-13, 8], [-17, 14]],
+    [[44, -25], [47, -25], [50, -15], [49, -12], [44, -17]],
+    [[35, 28], [39, 22], [43, 13], [45, 13], [52, 16], [56, 18], [59, 22], [56.5, 25], [56, 26.3], [55, 25.5], [52, 24], [50, 26], [48, 29], [47, 30], [44, 32], [39, 32], [35, 32]],
+    [[36, 36], [44, 38], [48, 30], [51, 27], [57, 25.5], [62, 25], [67, 24], [70, 21], [73, 17], [77, 8], [80, 13], [80, 16], [87, 21], [90, 22], [92, 21], [94, 17], [97, 16], [98, 9], [100, 6], [104, 1], [103, 9], [105, 9], [109, 12], [108, 17], [106, 21], [110, 21], [117, 24], [121, 30], [122, 37], [121, 40], [125, 40], [126, 45], [36, 45]],
+    [[-10, 36], [-9, 43], [-2, 43.5], [3, 43], [8, 44], [12, 44], [16, 41], [18, 40], [16, 38], [13, 41], [10, 44], [13, 45.5], [19, 42], [20, 40], [22, 37], [24, 38], [26, 41], [29, 41], [27, 37], [36, 36], [36, 45], [-10, 45]],
+    [[80, 10], [82, 7], [81, 6], [80, 6], [79.8, 8]],
+    [[95, 5], [98, 4], [104, -2], [106, -6], [102, -4], [96, 1]],
+    [[105, -6], [114, -7], [114, -8.5], [106, -7.5]],
+    [[109, 1], [110, -3], [116, -4], [119, 1], [117, 7], [113, 3]],
+    [[119, -5], [121, -5], [121, 1], [125, 1], [120, 0]],
+    [[120, 18], [122, 18], [124, 13], [126, 7], [125, 6], [122, 8], [120, 13]],
+    [[33, 35], [34.5, 35.5], [34, 34.6]]
+  ]; }
+  function inPoly(px, py, poly) {
+    var c = false;
+    for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      var xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+      if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) c = !c;
+    }
+    return c;
+  }
   function heroMap(c) {
     if (!c) return;
-    var x = c.getContext('2d'), W, H, D = Math.min(window.devicePixelRatio || 1, 2), T = 0, vis = true, my = c;
-    var A = { eg: [.31, .2], ma: [.1, .17], sn: [.04, .4], ml: [.15, .33], gn: [.08, .56], sl: [.13, .7], gh: [.2, .58], cm: [.26, .66], et: [.37, .44], ke: [.35, .66], rw: [.29, .8] },
-      B = { pk: [.69, .2], np: [.79, .14], in: [.73, .42], bd: [.86, .33], lk: [.77, .72], id: [.9, .86], ph: [.96, .54] }, U = [.54, .4], names = {}, R = [];
-    S.sourcing.africa.concat(S.sourcing.asia).forEach(function (n) { names[n[0]] = n[1]; });
-    Object.keys(A).concat(Object.keys(B)).forEach(function (k, i) { R.push({ k: k, p: A[k] || B[k], sp: .0016 + (i % 5) * .00035, off: (i * .137) % 1, lab: !!B[k] }); });
+    var x = c.getContext('2d'), W, H, D = Math.min(window.devicePixelRatio || 1, 2), T = 0, vis = true, base, bright, sc, ox, oy, LAND = getLand();
+    var L0 = -22, L1 = 128, A0 = 46, A1 = -37, UAE = [55.3, 25.2], R = [];
+    S.sourcing.africa.concat(S.sourcing.asia).forEach(function (n, i) {
+      R.push({ k: n[0], name: n[1], lon: n[2], lat: n[3], sp: .0011 + (i % 7) * .00022, off: (i * .173) % 1.7, cyc: 1.7 });
+    });
     var PL = [12, 0, 4, -2, -2, -11, -5, -11, -3, -2, -8, -1.5, -10, -5, -12, -5, -10, 0, -12, 5, -10, 5, -8, 1.5, -3, 2, -5, 11, -2, 11, 4, 2];
-    function size() { var r = my.parentNode.getBoundingClientRect(); W = r.width; H = r.height; c.width = W * D; c.height = H * D; x.setTransform(D, 0, 0, D, 0, 0); }
+    function P(lon, lat) { return [ox + (lon - L0) * sc, oy + (A0 - lat) * sc]; }
+    function size() {
+      var r = c.parentNode.getBoundingClientRect(); W = r.width; H = r.height;
+      c.width = W * D; c.height = H * D; x.setTransform(D, 0, 0, D, 0, 0);
+      // cover the hero, keeping the UAE a little right of centre on wide screens
+      sc = Math.max(W / (L1 - L0), H / (A0 - A1)) * (W < 700 ? 1.25 : 1.3);
+      var uxWant = W < 1080 ? W * .55 : W * .6;
+      ox = uxWant - (UAE[0] - L0) * sc; oy = H * (W < 1080 ? .46 : .64) - (A0 - UAE[1]) * sc;
+      oy = Math.min(0, Math.max(H - (A0 - A1) * sc, oy));
+      ox = Math.min(0, Math.max(W - (L1 - L0) * sc, ox));
+      var step = W < 700 ? 6 : 7, rad = W < 700 ? .9 : 1.05;
+      base = document.createElement('canvas'); bright = document.createElement('canvas');
+      [base, bright].forEach(function (cv) { cv.width = W * D; cv.height = H * D; cv.getContext('2d').setTransform(D, 0, 0, D, 0, 0); });
+      var b = base.getContext('2d'), h = bright.getContext('2d');
+      b.fillStyle = 'rgba(120,150,235,.42)'; h.fillStyle = 'rgba(150,185,255,.95)';
+      for (var gy = step / 2; gy < H; gy += step) for (var gx = step / 2; gx < W; gx += step) {
+        var lon = L0 + (gx - ox) / sc, lat = A0 - (gy - oy) / sc;
+        for (var p = 0; p < LAND.length; p++) if (inPoly(lon, lat, LAND[p])) { b.beginPath(); b.arc(gx, gy, rad, 0, 7); b.fill(); h.beginPath(); h.arc(gx, gy, rad + .25, 0, 7); h.fill(); break; }
+      }
+    }
     function q(a, b, cc, t) { var u = 1 - t; return u * u * a + 2 * u * t * b + t * t * cc; }
     function flagC(code, fx, fy, w, h) {
       var f = window.flagParts(code), n = f.s.length;
@@ -390,32 +431,46 @@
     }
     function frame() {
       if (!document.body.contains(c)) return;
-      x.clearRect(0, 0, W, H); T++;
-      var ux = U[0] * W, uy = U[1] * H, sm = W < 700;
+      T++;
+      x.clearRect(0, 0, W, H);
+      // map dots + a slow light sweep sliding across the continents
+      x.globalAlpha = 1; x.drawImage(base, 0, 0, W, H);
+      var bw = Math.max(220, W * .2), bx = reduce ? -9999 : ((T * 1.1) % (W + bw * 2)) - bw;
+      for (var s = 0; s < 8; s++) { var w8 = bw / 8, sx = bx + s * w8, a = Math.sin((s + .5) / 8 * Math.PI); if (sx + w8 < 0 || sx > W) continue; x.globalAlpha = a * .75; x.drawImage(bright, sx * D, 0, w8 * D, H * D, sx, 0, w8, H); }
+      var by = reduce ? -9999 : ((T * .55) % (H + 200)) - 100;
+      x.globalAlpha = .35; x.drawImage(bright, 0, Math.max(0, by) * D, W * D, 40 * D, 0, Math.max(0, by), W, 40);
+      x.globalAlpha = 1;
+      var U = P(UAE[0], UAE[1]), ux = U[0], uy = U[1], sm = W < 700;
       R.forEach(function (r, i) {
-        var x0 = r.p[0] * W, y0 = r.p[1] * H, cx = (x0 + ux) / 2, cy = Math.min(y0, uy) - H * (.14 + (i % 3) * .04);
-        x.setLineDash([3, 6]); x.lineDashOffset = -T * .3; x.strokeStyle = 'rgba(140,170,255,.16)'; x.lineWidth = 1;
+        var o = P(r.lon, r.lat), x0 = o[0], y0 = o[1];
+        if (x0 < -30 || x0 > W + 30 || y0 < -30 || y0 > H + 30) return;
+        var dist = Math.hypot(ux - x0, uy - y0), cx = (x0 + ux) / 2, cy = (y0 + uy) / 2 - dist * .28;
+        var raw = reduce ? .6 : (T * r.sp + r.off) % r.cyc, t = Math.min(raw, 1), flying = raw <= 1;
+        x.strokeStyle = flying ? 'rgba(232,189,102,.22)' : 'rgba(140,170,255,.10)'; x.lineWidth = 1; x.setLineDash([3, 6]); x.lineDashOffset = -T * .3;
         x.beginPath(); x.moveTo(x0, y0); x.quadraticCurveTo(cx, cy, ux, uy); x.stroke(); x.setLineDash([]);
-        var t = reduce ? .6 : (T * r.sp + r.off) % 1;
-        for (var k = 1; k < 14; k++) { var tt = t - k * .012; if (tt < 0) break; x.fillStyle = 'rgba(232,189,102,' + (.32 - k * .022) + ')'; x.beginPath(); x.arc(q(x0, cx, ux, tt), q(y0, cy, uy, tt), 1.6, 0, 7); x.fill(); }
-        var px = q(x0, cx, ux, t), py = q(y0, cy, uy, t), ang = Math.atan2(2 * (1 - t) * (cy - y0) + 2 * t * (uy - cy), 2 * (1 - t) * (cx - x0) + 2 * t * (ux - cx)), s2 = sm ? .75 : 1;
-        x.save(); x.translate(px, py); x.rotate(ang); x.scale(s2, s2); x.globalAlpha = t > .92 ? (1 - t) / .08 : Math.min(1, t / .06);
-        x.shadowColor = 'rgba(232,189,102,.9)'; x.shadowBlur = 10; x.fillStyle = '#ffe7b0'; x.beginPath(); x.moveTo(PL[0], PL[1]); for (var m = 2; m < PL.length; m += 2) x.lineTo(PL[m], PL[m + 1]); x.closePath(); x.fill(); x.restore();
-        x.globalAlpha = .7; flagC(r.k, x0 - 10, y0 - 7, 20, 14); x.globalAlpha = 1;
-        if (r.lab && !sm) { x.fillStyle = 'rgba(220,228,250,.55)'; x.font = '600 11px "Plus Jakarta Sans",sans-serif'; if (r.p[0] > .9) { x.textAlign = 'right'; x.fillText(names[r.k], x0 - 14, y0 + 4); x.textAlign = 'left'; } else x.fillText(names[r.k], x0 + 14, y0 + 4); }
+        // origin pulse when a plane departs
+        if (flying && t < .2) { var pr = t / .2; x.strokeStyle = 'rgba(232,189,102,' + (.6 * (1 - pr)) + ')'; x.lineWidth = 1.2; x.beginPath(); x.arc(x0, y0, 6 + pr * 22, 0, 7); x.stroke(); }
+        if (flying) {
+          for (var k = 1; k < 16; k++) { var tt = t - k * .011; if (tt < 0) break; x.fillStyle = 'rgba(232,189,102,' + (.36 - k * .022) + ')'; x.beginPath(); x.arc(q(x0, cx, ux, tt), q(y0, cy, uy, tt), 1.5, 0, 7); x.fill(); }
+          var px = q(x0, cx, ux, t), py = q(y0, cy, uy, t), ang = Math.atan2(2 * (1 - t) * (cy - y0) + 2 * t * (uy - cy), 2 * (1 - t) * (cx - x0) + 2 * t * (ux - cx)), s2 = sm ? .7 : .95;
+          x.save(); x.translate(px, py); x.rotate(ang); x.scale(s2, s2); x.globalAlpha = t > .9 ? (1 - t) / .1 : Math.min(1, t / .05);
+          x.shadowColor = 'rgba(232,189,102,.9)'; x.shadowBlur = 10; x.fillStyle = '#ffe7b0'; x.beginPath(); x.moveTo(PL[0], PL[1]); for (var m = 2; m < PL.length; m += 2) x.lineTo(PL[m], PL[m + 1]); x.closePath(); x.fill(); x.restore();
+        }
+        x.globalAlpha = flying ? .9 : .6; flagC(r.k, x0 - 8, y0 - 5.5, 16, 11); x.globalAlpha = 1;
+        if (!sm && flying && t < .45) { x.globalAlpha = t < .35 ? Math.min(1, t / .06) : (.45 - t) / .1; x.fillStyle = 'rgba(232,236,250,.85)'; x.font = '600 11px "Plus Jakarta Sans",sans-serif'; x.fillText(r.name, x0 + 12, y0 + 4); x.globalAlpha = 1; }
       });
-      for (var k2 = 0; k2 < 3; k2++) { var pp = ((T * .6 + k2 * 40) % 120) / 120; x.strokeStyle = 'rgba(232,189,102,' + (.5 * (1 - pp)) + ')'; x.lineWidth = 1.4; x.beginPath(); x.ellipse(ux, uy + 4, 8 + pp * 70, (8 + pp * 70) * .38, 0, 0, 7); x.stroke(); }
-      var g = x.createRadialGradient(ux, uy, 0, ux, uy, 60); g.addColorStop(0, 'rgba(232,189,102,.35)'); g.addColorStop(1, 'rgba(232,189,102,0)'); x.fillStyle = g; x.beginPath(); x.arc(ux, uy, 60, 0, 7); x.fill();
+      for (var k2 = 0; k2 < 3; k2++) { var pp = ((T * .6 + k2 * 40) % 120) / 120; x.strokeStyle = 'rgba(232,189,102,' + (.5 * (1 - pp)) + ')'; x.lineWidth = 1.4; x.beginPath(); x.ellipse(ux, uy + 3, 8 + pp * 80, (8 + pp * 80) * .38, 0, 0, 7); x.stroke(); }
+      var g = x.createRadialGradient(ux, uy, 0, ux, uy, 70); g.addColorStop(0, 'rgba(232,189,102,.35)'); g.addColorStop(1, 'rgba(232,189,102,0)'); x.fillStyle = g; x.beginPath(); x.arc(ux, uy, 70, 0, 7); x.fill();
       x.fillStyle = '#e8bd66'; x.beginPath(); x.arc(ux, uy, 6, 0, 7); x.fill(); x.strokeStyle = '#050914'; x.lineWidth = 2; x.stroke();
       x.fillStyle = 'rgba(220,220,220,.8)'; x.fillRect(ux - 1, uy - 48, 2, 42);
       var fx2 = ux + 1, fy2 = uy - 48, fw = 30, fh = 19;
-      for (var ii = 0; ii < fw; ii += 2) { var o = reduce ? 0 : Math.sin(ii * .28 + T * .1) * 1.8; if (ii < fw * .28) { x.fillStyle = '#ff0000'; x.fillRect(fx2 + ii, fy2 + o, 2.4, fh); } else { x.fillStyle = '#00732f'; x.fillRect(fx2 + ii, fy2 + o, 2.4, fh / 3); x.fillStyle = '#fff'; x.fillRect(fx2 + ii, fy2 + o + fh / 3, 2.4, fh / 3); x.fillStyle = '#000'; x.fillRect(fx2 + ii, fy2 + o + 2 * fh / 3, 2.4, fh / 3); } }
-      x.fillStyle = 'rgba(232,189,102,.9)'; x.font = '800 14px "Plus Jakarta Sans",sans-serif'; x.fillText('UAE', ux - 14, uy + 26);
-      x.fillStyle = 'rgba(150,170,220,.35)'; x.font = '800 11px "Plus Jakarta Sans",sans-serif'; x.fillText('AFRICA', W * .04, H * .94); x.fillText('ASIA', W * .86, H * .1);
+      for (var ii = 0; ii < fw; ii += 2) { var o2 = reduce ? 0 : Math.sin(ii * .28 + T * .1) * 1.8; if (ii < fw * .28) { x.fillStyle = '#ff0000'; x.fillRect(fx2 + ii, fy2 + o2, 2.4, fh); } else { x.fillStyle = '#00732f'; x.fillRect(fx2 + ii, fy2 + o2, 2.4, fh / 3); x.fillStyle = '#fff'; x.fillRect(fx2 + ii, fy2 + o2 + fh / 3, 2.4, fh / 3); x.fillStyle = '#000'; x.fillRect(fx2 + ii, fy2 + o2 + 2 * fh / 3, 2.4, fh / 3); } }
+      x.fillStyle = 'rgba(232,189,102,.95)'; x.font = '800 14px "Plus Jakarta Sans",sans-serif'; x.fillText('UAE', ux - 14, uy + 26);
+      var la = P(18, 2), lb = P(88, 34); x.fillStyle = 'rgba(150,170,220,.28)'; x.font = '800 ' + (sm ? 11 : 13) + 'px "Plus Jakarta Sans",sans-serif'; x.fillText('A F R I C A', la[0], la[1]); x.fillText('A S I A', lb[0], lb[1]);
       if (vis && !reduce) requestAnimationFrame(frame);
     }
     size(); frame();
-    window.addEventListener('resize', size);
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { size(); if (reduce) frame(); }, 120); });
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { var was = vis; vis = es[0].isIntersecting; if (vis && !was && !reduce) requestAnimationFrame(frame); }).observe(c);
   }
 

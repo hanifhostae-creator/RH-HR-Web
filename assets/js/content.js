@@ -45,7 +45,7 @@ window.SITE = {
   },
 
   stats: [
-    { value: "18+", label: "Sourcing countries across Africa & Asia" },
+    { value: "40", label: "Sourcing countries across Africa & Asia" },
     { value: "7", label: "Emirates covered for local hiring" },
     { value: "10", label: "Business services under one roof" },
     { value: "A–Z", label: "Selection, visa, travel & joining" }
@@ -175,10 +175,12 @@ window.SITE = {
     { icon: "users", title: "Recruitment Drive", category: "HR Solutions", text: "Skilled and unskilled hiring for growing teams." }
   ],
 
+  // [flag code, name, longitude, latitude] — used for the hero map and the sourcing lists
   sourcing: {
-    africa: [["eg", "Egypt"], ["gh", "Ghana"], ["et", "Ethiopia"], ["sn", "Senegal"], ["ke", "Kenya"], ["cm", "Cameroon"], ["ma", "Morocco"], ["sl", "Sierra Leone"], ["rw", "Rwanda"], ["ml", "Mali"], ["gn", "Guinea"]],
-    asia: [["pk", "Pakistan"], ["np", "Nepal"], ["in", "India"], ["bd", "Bangladesh"], ["lk", "Sri Lanka"], ["id", "Indonesia"], ["ph", "Philippines"]]
+    africa: [["eg", "Egypt", 31.2, 30.0], ["sd", "Sudan", 32.5, 15.6], ["er", "Eritrea", 38.9, 15.3], ["et", "Ethiopia", 38.7, 9.0], ["so", "Somalia", 45.3, 2.0], ["ke", "Kenya", 36.8, -1.3], ["ug", "Uganda", 32.6, 0.3], ["rw", "Rwanda", 30.1, -1.9], ["tz", "Tanzania", 39.3, -6.8], ["mw", "Malawi", 33.8, -14.0], ["zm", "Zambia", 28.3, -15.4], ["zw", "Zimbabwe", 31.0, -17.8], ["za", "South Africa", 28.0, -26.2], ["mg", "Madagascar", 47.5, -18.9], ["cm", "Cameroon", 11.5, 3.8], ["ng", "Nigeria", 7.5, 9.1], ["gh", "Ghana", -0.2, 5.6], ["tg", "Togo", 1.2, 6.1], ["bj", "Benin", 2.4, 6.4], ["ci", "Ivory Coast", -4.0, 5.3], ["lr", "Liberia", -10.8, 6.3], ["sl", "Sierra Leone", -13.2, 8.5], ["gn", "Guinea", -13.7, 9.6], ["gm", "Gambia", -16.6, 13.4], ["sn", "Senegal", -17.4, 14.7], ["ml", "Mali", -8.0, 12.6], ["bf", "Burkina Faso", -1.5, 12.4], ["ne", "Niger", 2.1, 13.5], ["ma", "Morocco", -6.8, 34.0], ["tn", "Tunisia", 10.2, 36.8]],
+    asia: [["pk", "Pakistan", 73.0, 33.7], ["in", "India", 77.2, 28.6], ["np", "Nepal", 85.3, 27.7], ["bd", "Bangladesh", 90.4, 23.8], ["lk", "Sri Lanka", 79.9, 6.9], ["mm", "Myanmar", 96.1, 19.7], ["vn", "Vietnam", 105.8, 21.0], ["ph", "Philippines", 121.0, 14.6], ["id", "Indonesia", 106.8, -6.2], ["uz", "Uzbekistan", 69.2, 41.3]]
   },
+
 
   emirates: ["Abu Dhabi", "Dubai", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"],
 
