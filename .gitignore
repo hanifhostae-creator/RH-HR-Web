@@ -1,0 +1,6 @@
+# Admin back end — private runtime data (users, leads, history)
+admin/data/
+# Uploaded images are site content but created on the server
+assets/uploads/*
+!assets/uploads/.htaccess
+!assets/uploads/.gitkeep

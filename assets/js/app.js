@@ -145,7 +145,7 @@
     return '<div class="steps' + (dark ? ' dark' : '') + '">' + list.map(function (s, i) { return '<div class="step reveal"><span class="num">0' + (i + 1) + '</span><h3>' + esc(s.title) + '</h3><p>' + esc(s.text) + '</p></div>'; }).join('') + '</div>';
   }
   function contactForm() {
-    return '<form class="form" data-kind="general" novalidate><div class="row2"><label>Your name<input name="Name" required autocomplete="name"></label><label>Email address<input name="Email" type="email" required autocomplete="email"></label></div><div class="row2"><label>Phone (optional)<input name="Phone" type="tel" autocomplete="tel"></label><label>Service<select name="Service">' + S.services.map(function (x) { return '<option>' + esc(x.name) + '</option>'; }).join('') + '<option>Other</option></select></label></div><label>Message<textarea name="Message" rows="4" placeholder="Tell us what you need"></textarea></label><button class="btn btn-primary btn-lg" type="submit">Send Message' + I('send', 'ic-sm') + '</button><p class="form-note">Your message opens in your email app, addressed to ' + esc(C.email) + '.</p></form>';
+    return '<form class="form" data-kind="general" novalidate><div class="row2"><label>Your name<input name="Name" required autocomplete="name"></label><label>Email address<input name="Email" type="email" required autocomplete="email"></label></div><div class="row2"><label>Phone (optional)<input name="Phone" type="tel" autocomplete="tel"></label><label>Service<select name="Service">' + S.services.map(function (x) { return '<option>' + esc(x.name) + '</option>'; }).join('') + '<option>Other</option></select></label></div><label>Message<textarea name="Message" rows="4" placeholder="Tell us what you need"></textarea></label><button class="btn btn-primary btn-lg" type="submit">Send Message' + I('send', 'ic-sm') + '</button><p class="form-note">Your message goes straight to our team. You can also email us at ' + esc(C.email) + '.</p></form>';
   }
   function contactBlock() {
     return '<section class="section soft" id="contact"><div class="wrap contact-grid"><div class="reveal">' + head('Make an appointment', 'We’re ready to help you', 'Tell us what you need and our team will get back to you with the next steps.') +
@@ -369,18 +369,37 @@
     });
   });
 
-  // forms → email
+  // forms → back end (admin/api.php stores them in the admin leads inbox); email app as fallback
   document.querySelectorAll('form.form').forEach(function (f) {
+    var trap = document.createElement('input'); // honeypot: hidden from people, bots fill it in
+    trap.name = 'website'; trap.tabIndex = -1; trap.autocomplete = 'off'; trap.setAttribute('aria-hidden', 'true');
+    trap.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0';
+    f.appendChild(trap);
     f.addEventListener('submit', function (e) {
       e.preventDefault();
       var bad = null;
       f.querySelectorAll('[required]').forEach(function (el) { var ok = el.value.trim() && (el.type !== 'email' || /\S+@\S+\.\S+/.test(el.value)); el.classList.toggle('err', !ok); if (!ok && !bad) bad = el; });
       if (bad) { bad.focus(); toast('Please fill in the required fields.', true); return; }
-      var lines = [], kind = f.getAttribute('data-kind');
-      Array.prototype.forEach.call(f.elements, function (el) { if (el.name && el.value) lines.push(el.name + ': ' + el.value); });
+      var lines = [], fields = {}, kind = f.getAttribute('data-kind');
+      Array.prototype.forEach.call(f.elements, function (el) { if (el.name && el.name !== 'website' && el.value) { lines.push(el.name + ': ' + el.value); fields[el.name] = el.value; } });
       var subj = kind === 'company' ? 'Manpower request from a company' : kind === 'agent' ? 'Recruitment partner enquiry' : 'Enquiry: ' + (f.elements.Service ? f.elements.Service.value : 'General');
-      location.href = 'mailto:' + C.email + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(lines.join('\n'));
-      toast('Opening your email app… Thank you!');
+      var send = f.querySelector('[type=submit]');
+      function viaEmail() {
+        location.href = 'mailto:' + C.email + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(lines.join('\n'));
+        toast('Opening your email app… Thank you!');
+      }
+      if (!window.fetch || ((location.protocol === 'file:' || window.RH_SPA) && !window.RH_DEMO)) return viaEmail();
+      send.disabled = true;
+      fetch('api/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: kind, page: location.pathname, fields: fields, website: trap.value }) })
+        .then(function (r) {
+          return r.json().catch(function () { return {}; }).then(function (d) {
+            if (r.ok) { f.reset(); toast('Thank you! Your message was sent — we will contact you soon.'); }
+            else if (r.status === 400 || r.status === 429) toast(d.error || 'Please check the form and try again.', true);
+            else viaEmail();
+          });
+        })
+        .catch(viaEmail)
+        .then(function () { send.disabled = false; });
     });
   });
     heroMap(document.getElementById('heroMap'));

@@ -1,0 +1,29 @@
+# RH Business Solutions — Apache / LiteSpeed config (Hostinger compatible)
+Options -Indexes
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Optional: force HTTPS once the SSL certificate is active (uncomment the next 2 lines)
+  # RewriteCond %{HTTPS} !=on
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Back end API → admin/api.php
+  RewriteRule ^api/(.*)$ admin/api.php?r=$1 [QSA,L]
+
+  # Never serve source, tooling or private data
+  RewriteRule ^(tools|admin/data)(/|$) - [F,L]
+  RewriteRule (^|/)\. - [F,L]
+</IfModule>
+
+<FilesMatch "\.(md|py|lock|tmp|sh)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  <FilesMatch "^(content\.js|.*\.html)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

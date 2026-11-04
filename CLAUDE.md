@@ -11,7 +11,7 @@ session you are in.
 | Session | Scope | Folder |
 |---|---|---|
 | **Front end** (public website) | Pages, design, animations, responsive layout | repo root: `*.html`, `assets/` |
-| **Admin panel + back end** | Admin dashboard, login, API/database, saving content, form submissions | `admin/` (see `admin/CLAUDE.md`) |
+| **Admin panel + back end** | Admin dashboard, login, API (PHP, JSON files), saving content, form submissions | `admin/` (see `admin/CLAUDE.md`, `admin/README.md`) |
 
 - A front-end session must **not** build the admin panel, a server, a database or auth.
 - An admin/back-end session must **not** redesign public pages. It may only change the
@@ -49,4 +49,13 @@ Text fields `summary` (services) and `text` (recruitmentItems) may contain `**wo
 
 Do not rename keys without updating both the front end and the admin panel.
 After changing content, run `node tools/build-site.js` so the static HTML and SEO tags match.
-Forms currently open the visitor's email app (`mailto:`); the back end will replace this.
+
+`assets/js/content.js` is **written by the admin panel** (`admin/api.php`) on every save, as
+`window.SITE = {…}` with quoted keys. Hand edits still work (the API also reads plain JS object
+syntax) but the next admin save reformats the file. On the live server, content changes come from
+the admin panel. Optional `image` fields (`services[]`, `projects[]`, uploaded to
+`assets/uploads/`) are stored by the admin and are ready for the front end to render.
+
+Forms post to `api/leads` (stored in the admin leads inbox) and fall back to `mailto:` when the
+API is unreachable (static preview, `file://`). Keep the `form.form[data-kind]` markup and field
+`name`s; the inbox shows them as-is.

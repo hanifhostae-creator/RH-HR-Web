@@ -24,7 +24,10 @@ python3 -m http.server 8000
 - `assets/js/app.js` — renders header, footer and every page from `window.SITE`; forms, menu, animations.
 - `assets/css/style.css` — design system (navy / brand blue / gold, Plus Jakarta Sans).
 
-Forms currently open the visitor's email app addressed to the company email; they can be connected to the admin backend later.
+Forms send submissions to the admin leads inbox (`api/leads`), falling back to the visitor's email app when the API is not available.
+
+## Admin panel
+`/admin/` — PHP back end, runs on Hostinger shared hosting. Local: `php -S localhost:8000 admin/router.php`. See `admin/README.md`.
 
 ## Shareable preview
 `python3 tools/build-preview.py preview.html` bundles everything into one hash-routed HTML file

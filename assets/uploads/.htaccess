@@ -1,0 +1,7 @@
+# Uploaded images only — never run scripts from this folder
+Options -ExecCGI -Indexes
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar .pl .py .cgi .sh
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
+<FilesMatch "\.(?!(png|jpe?g|webp|gif)$)[^.]+$">
+  Require all denied
+</FilesMatch>

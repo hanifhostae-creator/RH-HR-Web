@@ -8,22 +8,29 @@ session — read `../CLAUDE.md` first.
 
 Let the site owner manage everything on the public website without editing code.
 
-## Expected scope (to be designed in the admin session)
+## What is built (see `admin/README.md` for details and Hostinger deployment)
 
-- Secure login for the owner/editors.
-- Dashboard with counts and quick actions.
-- Edit every key of the content contract in `../assets/js/content.js` (`window.SITE`):
-  company details & logo, menu, hero words, stats, services (add/edit/delete, points, tags,
-  icon, colour), recruitment items, work process, hiring steps, portfolio projects,
-  sourcing countries, emirates, travel destinations.
-- Image uploads (logo, service and project pictures).
-- Store submissions from the Contact, Hire Staff and Partner With Us forms, with a
-  leads inbox (replace the current `mailto:` behaviour in `../assets/js/app.js`).
-- An API the front end reads content from (keep the same JSON shape as `window.SITE`,
-  so `app.js` only needs to load it instead of `content.js`).
+Stack: **PHP 8.1+ with JSON files** (no database, no Composer) so it runs on Hostinger shared
+hosting. Local: `php -S localhost:8000 admin/router.php`.
+
+- `admin/index.html`, `admin.css`, `admin.js` — the admin panel (vanilla JS, schema-driven editor
+  for every `window.SITE` key; `SECTIONS` in `admin.js` mirrors the content contract).
+- `admin/api.php` — the API (`/api/<route>`, rewritten by the root `.htaccess`). It reads
+  `assets/js/content.js`, validates and rewrites it on save, keeps versions in `admin/data/history/`,
+  creates/refreshes/removes `service-<id>.html` pages and their `sitemap.xml` entries.
+- `admin/data/` — users, leads, meta, history (private, git-ignored, blocked by `.htaccess`).
+- `assets/uploads/` — uploaded images.
+- `admin/demo/` — shareable demo (real UI + in-browser mock API in `demo-api.js`).
+
+Front-end touch points (kept minimal): `assets/js/app.js` forms POST to `api/leads` with a
+`mailto:` fallback and a honeypot field; `window.RH_DEMO` lets the demo preview send forms to the mock API.
 
 ## Rules for the admin session
 
-- Keep all admin and server code inside `admin/` (plus any config the stack needs).
+- Keep all admin and server code inside `admin/` (plus the root `.htaccess` and `assets/uploads/.htaccess`).
 - Do not redesign the public pages; match their dark navy / blue / gold look in the admin UI.
-- Keep the content keys stable; if a key must change, update `../assets/js/app.js` too.
+- Keep the content keys stable; if a key must change, update `../assets/js/app.js`, the `SECTIONS`
+  schema in `admin.js`, `validate_content()` in `api.php` and `admin/demo/demo-api.js` too.
+- Optional `image` fields on `services[]` and `projects[]` are stored by the admin but not yet
+  rendered by the front end (that is a front-end session task).
+- After changing `admin.js`/`admin.css`, rebuild the demo with `python3 admin/demo/build-demo.py <dir>`.
