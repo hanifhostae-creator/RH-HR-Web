@@ -54,7 +54,7 @@
         '<div class="f-quick"><a href="' + tel() + '" aria-label="Call us">' + I('phone') + '</a><a href="mailto:' + esc(C.email) + '" aria-label="Email us">' + I('mail') + '</a><a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Mai Tower, Al Nahda 1, Dubai') + '" target="_blank" rel="noopener" aria-label="Find us on the map">' + I('pin') + '</a></div>' +
         '<div class="f-tags"><span>' + I('users', 'ic-xs') + 'Recruitment</span><span>' + I('briefcase', 'ic-xs') + 'HR Solutions</span><span>' + I('plane', 'ic-xs') + 'Travel & Tour</span><span>' + I('building', 'ic-xs') + 'Business Setup</span></div></div>' +
       '<div class="f-col"><h5>Company</h5>' + [['index.html', 'Home', 'dashboard'], ['about.html', 'About Us', 'building'], ['portfolio.html', 'Portfolio', 'award'], ['hire-staff.html', 'Hire Staff', 'users'], ['partner-with-us.html', 'Partner With Us', 'link'], ['contact.html', 'Contact Us', 'phone']].map(function (l) { return '<a class="f-link" href="' + l[0] + '"><i>' + I(l[2]) + '</i>' + l[1] + '</a>'; }).join('') + '</div>' +
-      '<div class="f-col"><h5>Services</h5>' + S.services.map(function (x) { return '<a class="f-link" href="' + svcUrl(x) + '"><i>' + I(x.icon) + '</i>' + esc(x.short) + '</a>'; }).join('') + '</div>' +
+      '<div class="f-col f-svc"><h5>Services</h5><div class="f-svc-grid">' + S.services.map(function (x) { return '<a class="f-link" href="' + svcUrl(x) + '"><i>' + I(x.icon) + '</i>' + esc(x.short) + '</a>'; }).join('') + '</div></div>' +
       '<div class="f-col"><h5>Get in touch</h5><a class="f-ct" href="' + tel() + '"><i>' + I('phone') + '</i><span><small>Call us</small>' + esc(C.phone) + '</span></a><a class="f-ct" href="mailto:' + esc(C.email) + '"><i>' + I('mail') + '</i><span><small>Email</small>' + esc(C.email) + '</span></a><div class="f-ct"><i>' + I('pin') + '</i><span><small>Office</small>' + esc(C.address) + '</span></div></div></div>' +
       '<div class="f-bottom"><span>' + esc(C.copyright) + '</span><a href="#top" id="totop">Back to top ↑</a></div></div></footer>';
   }
@@ -157,11 +157,11 @@
   function home() {
     var H = S.hero, w0 = H.words[0];
     return '<section class="hero" id="hero"><canvas class="hero-map" id="heroMap" aria-hidden="true"></canvas><div class="hero-fade"></div><div class="hero-bg"></div><div class="wrap hero-in"><div class="hero-copy">' +
-      '<span class="pill">' + I('award', 'ic-xs') + esc(H.eyebrow) + '</span>' +
-      '<h1>' + esc(H.lead) + '<span class="rot" aria-live="polite"><i class="rot-ic" id="rotIc">' + I(w0.icon) + '</i><span id="rotW">' + esc(w0.text) + '</span></span></h1>' +
-      '<p class="lead">' + esc(C.intro) + '</p>' +
-      '<div class="acts">' + btn('hire-staff.html', 'Hire Staff', 'btn-gold btn-lg') + btn('partner-with-us.html', 'Partner With Us', 'btn-outline-light btn-lg', false) + '</div>' +
-      '<ul class="hero-pts">' + H.points.map(function (p) { return '<li>' + I('check', 'ic-xs') + esc(p) + '</li>'; }).join('') + '</ul></div>' +
+      '<span class="pill hp-pill">' + I('award', 'ic-xs') + esc(H.eyebrow) + '</span>' +
+      '<h1 class="hp-h1">' + esc(H.lead) + '<span class="rot" aria-live="polite"><i class="rot-ic" id="rotIc">' + I(w0.icon) + '</i><span id="rotW">' + esc(w0.text) + '</span></span></h1>' +
+      '<p class="lead hp-lead">' + esc(C.intro) + '</p>' +
+      '<div class="acts hp-acts">' + btn('hire-staff.html', 'Hire Staff', 'btn-gold btn-lg') + btn('partner-with-us.html', 'Partner With Us', 'btn-outline-light btn-lg', false) + '</div>' +
+      '<ul class="hero-pts hp-pts">' + H.points.map(function (p) { return '<li>' + I('check', 'ic-xs') + esc(p) + '</li>'; }).join('') + '</ul></div>' +
       '<div class="hero-vis"><div class="i3d-stage" id="i3dStage" style="--ac:' + (w0.color || '#3d6bff') + '"><div class="i3d-aura"></div><div class="i3d-orbit" id="i3dOrbit">' + ['idcard', 'passport', 'clipboard', 'plane', 'briefcase', 'globe'].map(function (k) { return '<span class="sat">' + I(k) + '</span>'; }).join('') + '</div><div class="i3d-tilt" id="i3dTilt"><div class="i3d">' + [1, 2, 3, 4, 5, 6].map(function (n) { return '<span class="i3d-slice" style="--z:' + (-n * 6) + 'px"></span>'; }).join('') + '<div class="i3d-face"><span class="i3d-shine"></span></div><div class="i3d-icon" id="i3dIc">' + I(w0.icon) + '</div></div></div><div class="i3d-floor"></div><div class="i3d-label"><small>We provide</small><b id="i3dT">' + esc(w0.text) + '</b></div></div>' +
 '<div class="float-card fc1"><i>' + I('users') + '</i><span><b>Bulk hiring</b><small>Skilled & unskilled</small></span></div>' +
       '<div class="float-card fc2"><i>' + I('shield') + '</i><span><b>Compliant</b><small>Visa & documents</small></span></div></div></div></section>' +
@@ -184,7 +184,9 @@
       '<section class="section"><div class="wrap">' + head('More services', 'Other services we offer', 'Beyond recruitment, we help you start, run and grow your business in the UAE.', true) + '<div class="grid g3">' + ['business-setup', 'travel-tour', 'web-development', 'seo-digital-marketing', 'management', 'e-commerce'].map(function (id) { return svcCard(svc(id)); }).join('') + '</div></div></section>' +
 
 
-      '<section class="section soft"><div class="wrap split rev"><div class="reveal"><span class="eyebrow">IT solutions</span><h2>Grow with us</h2><p class="lead-d">Strong web development and design give your venture a confident online presence. Digital marketing brings customers, e-commerce turns visits into sales, and HR solutions help you manage your team.</p>' + ticks(['All-in-one IT solution company', 'Expert and friendly teams', 'Quality services for your business', 'Reliable HR solutions']) + btn('contact.html', 'Contact now', 'btn-primary') + '</div><div class="reveal">' + visual(svc('seo-digital-marketing')) + '</div></div></section>' +
+      '<section class="section soft"><div class="wrap split"><div class="reveal"><span class="eyebrow">Company formation</span><h2>Want to start a business in the UAE?</h2><p class="lead-d">The UAE offers a strategic location, world-class infrastructure and attractive tax benefits. We guide you through every step — from the company licence and visa processing to compliance and a strong online presence.</p><a class="callout" href="' + tel() + '"><i class="tile sm">' + I('phone') + '</i><span><small>Support center</small><b>' + esc(C.phone) + '</b></span></a>' + btn('service-business-setup.html', 'Business setup details', 'btn-primary') + '</div><div class="reveal">' + visual(svc('business-setup')) + '</div></div>' +
+      '<div class="wrap" style="margin-top:56px">' + head('Work process', 'We follow a clear process', '', true) + steps(S.process) + '</div></section>' +
+      '<section class="section"><div class="wrap split rev"><div class="reveal"><span class="eyebrow">IT solutions</span><h2>Grow with us</h2><p class="lead-d">Strong web development and design give your venture a confident online presence. Digital marketing brings customers, e-commerce turns visits into sales, and HR solutions help you manage your team.</p>' + ticks(['All-in-one IT solution company', 'Expert and friendly teams', 'Quality services for your business', 'Reliable HR solutions']) + btn('contact.html', 'Contact now', 'btn-primary') + '</div><div class="reveal">' + visual(svc('seo-digital-marketing')) + '</div></div></section>' +
 
       contactBlock();
   }
@@ -423,16 +425,16 @@
       var r = c.parentNode.getBoundingClientRect(); W = r.width; H = r.height;
       c.width = W * D; c.height = H * D; x.setTransform(D, 0, 0, D, 0, 0);
       // cover the hero, keeping the UAE a little right of centre on wide screens
-      sc = Math.max(W / (L1 - L0), H / (A0 - A1)) * (W < 700 ? 1.25 : 1.3);
-      var uxWant = W < 1080 ? W * .55 : W * .6;
-      ox = uxWant - (UAE[0] - L0) * sc; oy = H * (W < 1080 ? .46 : .64) - (A0 - UAE[1]) * sc;
-      oy = Math.min(0, Math.max(H - (A0 - A1) * sc, oy));
-      ox = Math.min(0, Math.max(W - (L1 - L0) * sc, ox));
-      var step = W < 700 ? 6 : 7, rad = W < 700 ? .9 : 1.05;
+      sc = W < 700 ? W / (L1 - L0) * 2.3 : W < 1080 ? Math.max(W / (L1 - L0), H / (A0 - A1)) * 1.1 : Math.max(W / (L1 - L0), H / (A0 - A1)) * 1.3;
+      var uxWant = W < 700 ? W * .5 : W < 1080 ? W * .55 : W * .6;
+      ox = uxWant - (UAE[0] - L0) * sc; oy = H * (W < 700 ? .3 : W < 1080 ? .46 : .64) - (A0 - UAE[1]) * sc;
+      if ((A0 - A1) * sc > H) oy = Math.min(0, Math.max(H - (A0 - A1) * sc, oy));
+      if ((L1 - L0) * sc > W) ox = Math.min(0, Math.max(W - (L1 - L0) * sc, ox));
+      var step = W < 700 ? 5 : 7, rad = W < 700 ? .95 : 1.05;
       base = document.createElement('canvas'); bright = document.createElement('canvas');
       [base, bright].forEach(function (cv) { cv.width = W * D; cv.height = H * D; cv.getContext('2d').setTransform(D, 0, 0, D, 0, 0); });
       var b = base.getContext('2d'), h = bright.getContext('2d');
-      b.fillStyle = 'rgba(120,150,235,.42)'; h.fillStyle = 'rgba(150,185,255,.95)';
+      b.fillStyle = W < 700 ? 'rgba(130,160,240,.5)' : 'rgba(120,150,235,.42)'; h.fillStyle = 'rgba(150,185,255,.95)';
       for (var gy = step / 2; gy < H; gy += step) for (var gx = step / 2; gx < W; gx += step) {
         var lon = L0 + (gx - ox) / sc, lat = A0 - (gy - oy) / sc;
         for (var p = 0; p < LAND.length; p++) if (inPoly(lon, lat, LAND[p])) { b.beginPath(); b.arc(gx, gy, rad, 0, 7); b.fill(); h.beginPath(); h.arc(gx, gy, rad + .25, 0, 7); h.fill(); break; }
