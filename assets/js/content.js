@@ -33,13 +33,13 @@ window.SITE = {
     eyebrow: "Recruitment & HR Solutions · Dubai, UAE",
     lead: "We Provide",
     words: [
-      { icon: "users", text: "Recruitment" },
-      { icon: "globe", text: "Bulk Hiring" },
-      { icon: "briefcase", text: "HR Solutions" },
-      { icon: "building", text: "Business Setup" },
-      { icon: "code", text: "Development" },
-      { icon: "trending", text: "Marketing" },
-      { icon: "plane", text: "Travel & Tour" }
+      { icon: "users", text: "Recruitment", color: "#3d6bff" },
+      { icon: "globe", text: "Bulk Hiring", color: "#1fb2e6" },
+      { icon: "briefcase", text: "HR Solutions", color: "#8b5cf6" },
+      { icon: "building", text: "Business Setup", color: "#dcaa48" },
+      { icon: "code", text: "Development", color: "#22c08a" },
+      { icon: "trending", text: "Marketing", color: "#ff8a3d" },
+      { icon: "plane", text: "Travel & Tour", color: "#14b8a6" }
     ],
     points: ["Inside & outside the UAE", "Skilled & unskilled workers", "Visa & joining support"]
   },

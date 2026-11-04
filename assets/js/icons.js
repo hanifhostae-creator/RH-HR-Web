@@ -84,6 +84,7 @@
     };
   }
 
+  window.flagParts = parts;
   window.flagShapes = function (code, x, y, w, h) {
     var f = parts(code), n = f.s.length, o = '<g>';
     f.s.forEach(function (c, i) {
