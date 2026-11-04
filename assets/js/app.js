@@ -212,7 +212,7 @@
   function contact() {
     return pageHero('Contact us', 'Let’s talk about your business', 'Hiring, a visit visa, a new company or a website — our team is one message away.', [['Contact Us']]) +
       '<section class="section"><div class="wrap"><div class="grid g3 ct-cards">' + [['phone', 'Phone', C.phone, tel()], ['mail', 'Email', C.email, 'mailto:' + C.email], ['pin', 'Office', C.address, '']].map(function (a) { return '<' + (a[3] ? 'a href="' + a[3] + '"' : 'div') + ' class="card ct-card reveal"><i class="tile">' + I(a[0]) + '</i><small>' + a[1] + '</small><b>' + esc(a[2]) + '</b></' + (a[3] ? 'a' : 'div') + '>'; }).join('') + '</div>' +
-      '<div class="contact-grid mt"><div class="card form-card reveal"><h3>Send us a message</h3>' + contactForm() + '</div><div class="map-embed reveal"><iframe title="Office location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=' + encodeURIComponent('Mai Tower, Al Nahda 1, Dubai') + '&output=embed"></iframe></div></div></div></section>';
+      '<div class="contact-grid mt"><div class="card form-card reveal"><h3>Send us a message</h3>' + contactForm() + '</div>' + (window.RH_SPA ? '<a class="map-embed map-link reveal" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Mai Tower, Al Nahda 1, Dubai') + '" target="_blank" rel="noopener">' + uaeMap() + '<span class="btn btn-primary">' + I('pin', 'ic-sm') + 'Open in Google Maps</span></a>' : '<div class="map-embed reveal"><iframe title="Office location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=' + encodeURIComponent('Mai Tower, Al Nahda 1, Dubai') + '&output=embed"></iframe></div>') + '</div></div></section>';
   }
 
   function lead(kind) {
@@ -229,14 +229,87 @@
 
   /* ---------- mount ---------- */
   var R = { home: home, about: about, services: services, service: service, portfolio: portfolio, contact: contact, hire: function () { return lead('company'); }, partner: function () { return lead('agent'); } };
-  document.getElementById('header').innerHTML = header();
-  document.getElementById('main').innerHTML = (R[page] || home)();
-  document.getElementById('footer').innerHTML = footer();
+  // Single-file preview mode: pages are routed by #hash instead of separate .html files.
+  var SPA = !!window.RH_SPA, FILES = { 'index.html': 'home', 'about.html': 'about', 'services.html': 'services', 'portfolio.html': 'portfolio', 'contact.html': 'contact', 'hire-staff.html': 'hire-staff', 'partner-with-us.html': 'partner-with-us' }, HASH = { 'hire-staff': 'hire', 'partner-with-us': 'partner' };
+  var svcId = null;
+  function fromHash() {
+    var h = (location.hash || '#home').slice(1);
+    if (h.indexOf('service-') === 0) { svcId = h.slice(8); return 'service'; }
+    return HASH[h] || (R[h] ? h : 'home');
+  }
+  function toHash(root) {
+    if (!SPA) return;
+    root.querySelectorAll('a[href]').forEach(function (a) {
+      var h = a.getAttribute('href'), m = h.match(/^service\.html\?id=(.+)$/);
+      if (m) a.setAttribute('href', '#service-' + decodeURIComponent(m[1]));
+      else if (FILES[h]) a.setAttribute('href', '#' + FILES[h]);
+    });
+  }
+  if (SPA) {
+    window.URLSearchParams = (function (U) { return function (q) { return svcId && (q === location.search) ? new U('id=' + svcId) : new U(q); }; })(window.URLSearchParams);
+    page = fromHash();
+  }
+  function mount() {
+    document.getElementById('header').innerHTML = header();
+    document.getElementById('main').innerHTML = (R[page] || home)();
+    document.getElementById('footer').innerHTML = footer();
+    toHash(document.body);
+  }
+  mount();
+  if (!document.querySelector('.bg-fx')) {
+    var fx = document.createElement('div'); fx.className = 'bg-fx'; fx.setAttribute('aria-hidden', 'true');
+    fx.innerHTML = '<div class="aurora au1"></div><div class="aurora au2"></div><div class="aurora au3"></div><div class="grid-l"></div><canvas id="fxc"></canvas><div class="vig"></div>';
+    document.body.insertBefore(fx, document.body.firstChild);
+    network(document.getElementById('fxc'));
+  }
+  if (SPA) window.addEventListener('hashchange', function () {
+    if ((location.hash || '').length > 1 && document.getElementById(location.hash.slice(1)) && !/^#(home|about|services|portfolio|contact|hire-staff|partner-with-us|service-)/.test(location.hash)) return;
+    page = fromHash(); mount(); bind(); window.scrollTo(0, 0);
+  });
+
+  /* Animated background: slow-drifting talent network with gold "routes" */
+  function network(c) {
+    var x = c.getContext('2d'), W, H, D = Math.min(window.devicePixelRatio || 1, 2), N = [], mouse = { x: -999, y: -999 }, run = true, t = 0;
+    function size() {
+      W = window.innerWidth; H = window.innerHeight; c.width = W * D; c.height = H * D; x.setTransform(D, 0, 0, D, 0, 0);
+      var n = Math.round(Math.min(90, W * H / 16000)); N = [];
+      for (var i = 0; i < n; i++) N.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .22, vy: (Math.random() - .5) * .22, r: Math.random() * 1.4 + .6, g: Math.random() < .12 });
+    }
+    function frame() {
+      x.clearRect(0, 0, W, H); t++;
+      for (var i = 0; i < N.length; i++) {
+        var p = N[i];
+        if (!reduce) { p.x += p.vx; p.y += p.vy; if (p.x < -20) p.x = W + 20; if (p.x > W + 20) p.x = -20; if (p.y < -20) p.y = H + 20; if (p.y > H + 20) p.y = -20; }
+        var dm = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+        for (var j = i + 1; j < N.length; j++) {
+          var q = N[j], d = Math.hypot(p.x - q.x, p.y - q.y);
+          if (d < 150) {
+            var a = (1 - d / 150) * .22; if (dm < 180) a *= 1.8;
+            x.strokeStyle = (p.g && q.g) ? 'rgba(220,170,72,' + a * 1.6 + ')' : 'rgba(110,145,255,' + a + ')';
+            x.lineWidth = 1; x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke();
+          }
+        }
+      }
+      for (i = 0; i < N.length; i++) {
+        p = N[i]; var tw = .55 + .45 * Math.sin(t * .02 + i);
+        x.fillStyle = p.g ? 'rgba(232,189,102,' + (.75 * tw + .2) + ')' : 'rgba(160,185,255,' + (.5 * tw + .2) + ')';
+        x.beginPath(); x.arc(p.x, p.y, p.g ? p.r + .8 : p.r, 0, 7); x.fill();
+        if (p.g) { x.fillStyle = 'rgba(232,189,102,.08)'; x.beginPath(); x.arc(p.x, p.y, 7, 0, 7); x.fill(); }
+      }
+      if (run && !reduce) requestAnimationFrame(frame);
+    }
+    size(); frame();
+    window.addEventListener('resize', function () { size(); if (reduce) frame(); });
+    window.addEventListener('pointermove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+    document.addEventListener('visibilitychange', function () { var was = run; run = !document.hidden; if (run && !was && !reduce) requestAnimationFrame(frame); });
+  }
 
   /* ---------- behaviour ---------- */
+  var scrollBound = false;
+  function bind() {
   var hdr = document.getElementById('hdr'), nav = document.getElementById('nav'), bur = document.getElementById('burger');
   function onScroll() { hdr.classList.toggle('scrolled', window.scrollY > 10); }
-  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  if (!scrollBound) { window.addEventListener('scroll', function () { var h = document.getElementById('hdr'); h && h.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true }); scrollBound = true; } onScroll();
   function setMenu(open) { nav.classList.toggle('open', open); document.body.classList.toggle('menu-open', open); bur.setAttribute('aria-expanded', open); bur.innerHTML = I(open ? 'close' : 'menu'); }
   bur.addEventListener('click', function () { setMenu(!nav.classList.contains('open')); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
@@ -255,9 +328,10 @@
 
   // rotating hero word
   var rw = document.getElementById('rotW'), ri = document.getElementById('rotIc');
+  clearInterval(window.__rhRot);
   if (rw && !reduce) {
     var k = 0;
-    setInterval(function () {
+    window.__rhRot = setInterval(function () {
       rw.parentNode.classList.add('out');
       setTimeout(function () { k = (k + 1) % S.hero.words.length; var w = S.hero.words[k]; rw.textContent = w.text; ri.innerHTML = I(w.icon); rw.parentNode.classList.remove('out'); }, 350);
     }, 2800);
@@ -286,6 +360,8 @@
       toast('Opening your email app… Thank you!');
     });
   });
+  }
+  bind();
   function toast(msg, err) {
     var t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.setAttribute('role', 'status'); t.innerHTML = I(err ? 'close' : 'check') + '<span>' + esc(msg) + '</span>';
     document.body.appendChild(t); requestAnimationFrame(function () { t.classList.add('show'); });

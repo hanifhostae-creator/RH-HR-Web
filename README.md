@@ -25,3 +25,7 @@ python3 -m http.server 8000
 - `assets/css/style.css` — design system (navy / brand blue / gold, Plus Jakarta Sans).
 
 Forms currently open the visitor's email app addressed to the company email; they can be connected to the admin backend later.
+
+## Shareable preview
+`python3 tools/build-preview.py preview.html` bundles everything into one hash-routed HTML file
+(`#about`, `#service-outside-recruitment`, …) for sharing a preview link.
