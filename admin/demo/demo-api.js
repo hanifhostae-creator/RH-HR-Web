@@ -19,6 +19,8 @@
       fields: { Name: 'Example: Sara Ali', Email: 'sara@example.com', Service: 'Travel & Tour', Message: 'Visit visa for Georgia for two people in December?' } }
   ]);
 
+  function log(action, detail) { var a = get('activity', []); a.unshift({ at: iso(Date.now()), who: (get('users')[0] || {}).email, action: action, detail: detail, ip: 'demo' }); set('activity', a.slice(0, 300)); }
+  if (!get('activity')) set('activity', [{ at: iso(now - 864e5), who: 'owner@example.com', action: 'setup', detail: 'Database installed and owner account created', ip: 'demo' }]);
   function plain(o) { return JSON.parse(JSON.stringify(o)); }
   function reply(status, body) { return Promise.resolve(new Response(JSON.stringify(body), { status: status, headers: { 'Content-Type': 'application/json' } })); }
   function err(status, msg) { return reply(status, { error: msg }); }
@@ -51,18 +53,27 @@
     if (!me) return err(401, 'Please sign in.');
     if (route === 'GET auth/me') return reply(200, { user: me });
     if (route === 'POST auth/logout') { set('signedOut', true); return reply(200, { ok: true }); }
+    if (route === 'POST auth/2fa/start') return reply(200, { secret: 'DEMOKEY234567ABCDEFGHIJKLMNOPQRS', uri: 'otpauth://totp/RH%20Admin%20(demo)?secret=DEMOKEY234567ABCDEFGHIJKLMNOPQRS' });
+    if (route === 'POST auth/2fa/enable') { if (!/^\d{6}$/.test(String(body.code || '').replace(/\s/g, ''))) return err(400, 'Enter the 6-digit code. In the demo any 6 digits work.'); var u1 = get('users'); u1[0].twoFactor = true; set('users', u1); log('2fa.enable', ''); return reply(200, { ok: true }); }
+    if (route === 'POST auth/2fa/disable') { var u2 = get('users'); u2[0].twoFactor = false; set('users', u2); log('2fa.disable', ''); return reply(200, { ok: true }); }
+    if (route === 'POST publish') { log('site.republish', 'Website files rewritten from the database'); return reply(200, { ok: true }); }
+    if (route === 'GET activity') return reply(200, get('activity', []));
+    if (route === 'GET settings') return reply(200, get('settings', {}));
+    if (route === 'PUT settings') { if (body.notifyEmail && !/^\S+@\S+\.\S+$/.test(body.notifyEmail)) return err(400, 'Enter a valid email address for notifications, or leave it empty.'); set('settings', { notifyEmail: body.notifyEmail || '' }); log('settings.save', body.notifyEmail ? 'Lead alerts to ' + body.notifyEmail : 'Lead alerts off'); return reply(200, { ok: true }); }
+    if (method === 'POST' && p[0] === 'users' && p[2] === 'reset-2fa') { var u3 = get('users'); u3.forEach(function (x) { if (x.id === p[1]) x.twoFactor = false; }); set('users', u3); return reply(200, { ok: true }); }
     if (route === 'POST auth/password') return (body.password || '').length < 10 ? err(400, 'Password must be at least 10 characters.') : reply(200, { ok: true });
 
     if (route === 'GET content/meta') return reply(200, get('meta', {}));
     if (route === 'PUT content') {
       var meta = get('meta', {});
       if (meta.version && body.base !== meta.version && !body.force) return err(409, 'Someone else saved changes after you opened the editor.');
-      var hist = get('history', []); hist.unshift({ id: iso(Date.now()).replace(/[:.]/g, '-'), content: get('content') }); set('history', hist.slice(0, 20));
+      var hist = get('history', []); hist.unshift({ id: iso(Date.now()).replace(/[:.]/g, '-'), at: iso(Date.now()), by: me.email, content: get('content') }); set('history', hist.slice(0, 20));
+      log('content.save', 'Content saved');
       set('content', body.content);
       meta = { savedAt: iso(Date.now()), savedBy: me.email, version: id() }; set('meta', meta);
       return reply(200, { ok: true, meta: meta });
     }
-    if (route === 'GET history') return reply(200, get('history', []).map(function (h) { return { id: h.id, size: JSON.stringify(h.content).length }; }));
+    if (route === 'GET history') return reply(200, get('history', []).map(function (h) { return { id: h.id, at: h.at, by: h.by, size: JSON.stringify(h.content).length }; }));
     if (method === 'POST' && p[0] === 'history') {
       var v = get('history', []).filter(function (h) { return h.id === p[1]; })[0];
       if (!v) return err(404, 'Version not found.');
@@ -110,5 +121,5 @@
     if (method === 'DELETE' && p[0] === 'users') { set('users', get('users').filter(function (x) { return x.id !== p[1]; })); return reply(200, { ok: true }); }
     return err(404, 'Not found.');
   };
-  window.RH_DEMO_RESET = function () { ['content', 'users', 'leads', 'meta', 'history', 'uploads', 'signedOut'].forEach(function (k) { delete mem[k]; try { localStorage.removeItem('rh-demo-' + k); } catch (e) {} }); location.reload(); };
+  window.RH_DEMO_RESET = function () { ['content', 'users', 'leads', 'meta', 'history', 'uploads', 'signedOut', 'activity', 'settings'].forEach(function (k) { delete mem[k]; try { localStorage.removeItem('rh-demo-' + k); } catch (e) {} }); location.reload(); };
 })();

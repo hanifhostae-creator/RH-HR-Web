@@ -141,28 +141,49 @@
   function renderAuth() {
     app.className = '';
     api('GET', '/api/auth/setup').then(function (s) {
-      var setup = s.needsSetup, msg = h('p', { class: 'err-msg', hidden: true });
+      var setup = s.needsSetup, needsDb = s.needsDb, msg = h('p', { class: 'err-msg', hidden: true });
+      var fld = function (label, attrs, help) { return h('label', { class: 'fld' }, h('span', { text: label }), h('input', attrs), help ? h('em', { text: help }) : null); };
+      var drivers = s.drivers || ['mysql'];
+      var dbBox = needsDb ? h('fieldset', { class: 'dbset' },
+        h('legend', { text: 'Database' }),
+        h('p', { class: 'desc', text: 'Create a MySQL database in Hostinger hPanel → Databases → Management, then enter its details here.' }),
+        drivers.length > 1 ? h('label', { class: 'fld' }, h('span', { text: 'Type' }), h('select', { name: 'driver', onchange: function () { mysqlBox.hidden = f.driver.value !== 'mysql'; } },
+          h('option', { value: 'mysql', text: 'MySQL / MariaDB (recommended)' }), h('option', { value: 'sqlite', text: 'SQLite file (local testing)' }))) : null,
+        (mysqlBox = h('div', null,
+          fld('Database name', { name: 'dbname', autocomplete: 'off', placeholder: 'u123456789_rh' }),
+          fld('Database user', { name: 'dbuser', autocomplete: 'off', placeholder: 'u123456789_rhadmin' }),
+          fld('Database password', { name: 'dbpass', type: 'password', autocomplete: 'new-password' }),
+          fld('Host', { name: 'dbhost', value: 'localhost', autocomplete: 'off' }, 'Leave as localhost on Hostinger.')))) : null;
+      var mysqlBox;
+      var code = h('label', { class: 'fld', hidden: true }, h('span', { text: 'Two-step code' }), h('input', { name: 'code', inputmode: 'numeric', autocomplete: 'one-time-code', maxlength: 8, placeholder: '123 456' }), h('em', { text: 'The 6-digit code from your authenticator app.' }));
       var f = h('form', { class: 'auth-card', novalidate: true },
         logo(),
-        h('h1', { text: setup ? 'Create the owner account' : 'Sign in' }),
-        h('p', { class: 'desc', text: setup ? 'First run: this account will manage the website and add other users.' : 'Manage the website content and form enquiries.' }),
-        msg,
-        setup ? h('label', { class: 'fld' }, h('span', { text: 'Your name' }), h('input', { name: 'name', autocomplete: 'name' })) : null,
-        h('label', { class: 'fld' }, h('span', { text: 'Email' }), h('input', { name: 'email', type: 'email', autocomplete: 'username', required: true })),
-        h('label', { class: 'fld' }, h('span', { text: 'Password' }), h('input', { name: 'password', type: 'password', autocomplete: setup ? 'new-password' : 'current-password', required: true }), setup ? h('em', { text: 'At least 10 characters.' }) : null),
-        h('button', { class: 'btn primary', type: 'submit', style: 'width:100%;margin-top:6px' }, setup ? 'Create account' : 'Sign in')
+        h('h1', { text: setup ? (needsDb ? 'Install the admin panel' : 'Create the owner account') : 'Sign in' }),
+        h('p', { class: 'desc', text: setup ? 'First run: connect the database and create the owner account. The owner manages the website and adds other users.' : 'Manage the website content and form enquiries.' }),
+        msg, dbBox,
+        setup ? h('div', { class: 'nav-g', style: 'margin:6px 0 10px', text: needsDb ? 'Owner account' : '' }) : null,
+        setup ? fld('Your name', { name: 'name', autocomplete: 'name' }) : null,
+        fld('Email', { name: 'email', type: 'email', autocomplete: 'username', required: true }),
+        fld('Password', { name: 'password', type: 'password', autocomplete: setup ? 'new-password' : 'current-password', required: true }, setup ? 'At least 10 characters. Use a strong, unique password.' : ''),
+        code,
+        h('button', { class: 'btn primary', type: 'submit', style: 'width:100%;margin-top:6px' }, setup ? (needsDb ? 'Install & create account' : 'Create account') : 'Sign in')
       );
       f.addEventListener('submit', function (e) {
         e.preventDefault();
-        var b = f.querySelector('button'); b.disabled = true; msg.hidden = true;
+        var b = f.querySelector('button[type=submit]'); b.disabled = true; msg.hidden = true;
         var body = { email: f.email.value, password: f.password.value };
         if (setup) body.name = f.name.value;
+        if (needsDb) body.db = { driver: f.driver ? f.driver.value : 'mysql', name: f.dbname.value, user: f.dbuser.value, pass: f.dbpass.value, host: f.dbhost.value };
+        if (!code.hidden) body.code = f.code.value;
         api('POST', setup ? '/api/auth/setup' : '/api/auth/login', body).then(function (d) { state.user = d.user; start(); })
-          .catch(function (er) { msg.textContent = er.message; msg.hidden = false; b.disabled = false; });
+          .catch(function (er) {
+            if (er.data && er.data.need2fa) { code.hidden = false; f.code.focus(); }
+            msg.textContent = er.message; msg.hidden = false; b.disabled = false;
+          });
       });
       put(app, h('div', { class: 'auth' }, f));
-      (f.email.value ? f.password : (f.name || f.email)).focus();
-    }).catch(function () { app.textContent = 'Cannot reach the server. Is admin/server.js running?'; });
+      (needsDb ? f.dbname : setup ? f.name : f.email).focus();
+    }).catch(function () { app.textContent = 'Cannot reach the server. Check that PHP is enabled and the .htaccess file was uploaded.'; });
   }
 
   /* ---------- shell ---------- */
@@ -195,6 +216,8 @@
         navLink('media', 'Images', 'eye'),
         navLink('history', 'Versions', 'clock'),
         state.user.role === 'owner' ? navLink('users', 'Users', 'lock') : null,
+        state.user.role === 'owner' ? navLink('activity', 'Activity log', 'clipboard') : null,
+        state.user.role === 'owner' ? navLink('settings', 'Settings', 'wrench') : null,
         navLink('account', 'My account', 'idcard')
       ),
       h('div', { class: 'side-foot' }, h('b', { text: state.user.name || state.user.email }), h('small', { text: state.user.role === 'owner' ? 'Owner' : 'Editor' }),
@@ -233,7 +256,7 @@
       var s = SECTIONS.filter(function (x) { return x.key === v.slice(2); })[0];
       if (s) return show(s.title, contentView(s));
     }
-    var views = { dashboard: ['Dashboard', dashboardView], leads: ['Leads inbox', leadsView], media: ['Images', mediaView], history: ['Versions', historyView], preview: ['Website preview', previewView], users: ['Users', usersView], account: ['My account', accountView] };
+    var views = { dashboard: ['Dashboard', dashboardView], leads: ['Leads inbox', leadsView], media: ['Images', mediaView], history: ['Versions', historyView], activity: ['Activity log', activityView], settings: ['Settings', settingsView], preview: ['Website preview', previewView], users: ['Users', usersView], account: ['My account', accountView] };
     var x = views[v] || views.dashboard;
     show(x[0], x[1]());
   }
@@ -592,10 +615,13 @@
     var box = h('div');
     api('GET', '/api/history').then(function (list) {
       put(box, 
-        h('div', { class: 'card' }, h('h2', { text: 'Previous versions' }), h('p', { class: 'desc', text: 'A copy is kept every time content is saved (last 50). Restoring makes that version the current content.' }),
+        h('div', { class: 'card' }, h('h2', { text: 'Website files' }),
+          h('p', { class: 'desc', text: 'Every save writes the website straight from the database. If you upload new site files to the hosting later, the admin rewrites the content automatically the next time you open it. You can also do it now.' }),
+          h('button', { class: 'btn', onclick: function (e) { var b = e.currentTarget; b.disabled = true; api('POST', '/api/publish', {}).then(function () { toast('Website files rewritten from the database.'); }).catch(function (er) { toast(er.message, true); }).finally(function () { b.disabled = false; }); } }, ic('send'), 'Re-publish website now')),
+        h('div', { class: 'card' }, h('h2', { text: 'Previous versions' }), h('p', { class: 'desc', text: 'A copy is kept in the database every time content is saved (last 100). Restoring makes that version the current content.' }),
           list.length ? h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl' }, h('tbody', null, list.map(function (v) {
-            var d = v.id.replace(/T(\d\d)-(\d\d)-(\d\d)-(\d+)Z$/, 'T$1:$2:$3.$4Z');
-            return h('tr', null, h('td', null, h('b', { text: fmtDate(d) })), h('td', { text: size(v.size) }), h('td', { style: 'text-align:right' }, h('button', { class: 'btn sm', onclick: function () {
+            var d = v.at || v.id;
+            return h('tr', null, h('td', null, h('b', { text: fmtDate(d) })), h('td', { text: v.by || '' }), h('td', { text: size(v.size) }), h('td', { style: 'text-align:right' }, h('button', { class: 'btn sm', onclick: function () {
               ask('Restore the version from ' + fmtDate(d) + '?' + (state.dirty ? ' Your unsaved changes will be lost.' : '') + ' The current content is kept as a version too.', 'Restore', function () { api('POST', '/api/history/' + v.id, {}).then(function (res) { state.content = res.content; state.draft = clone(res.content); state.meta = res.meta; state.dirty = false; updateState(); toast('Version restored — the website is updated.'); route(); }).catch(function (e) { toast(e.message, true); }); });
             } }, 'Restore')));
           })))) : h('p', { class: 'empty', text: 'No previous versions yet.' })));
@@ -620,12 +646,16 @@
           api('POST', '/api/users', { name: f.name.value, email: f.email.value, password: f.password.value, role: f.role.value }).then(function () { toast('User added.'); load(); }).catch(function (er) { toast(er.message, true); });
         });
         put(box, h('div', { class: 'card' }, h('h2', { text: 'Users' }), h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl' },
-          h('thead', null, h('tr', null, h('th', { text: 'Name' }), h('th', { text: 'Email' }), h('th', { text: 'Role' }), h('th', { text: 'Last sign-in' }), h('th'))),
+          h('thead', null, h('tr', null, h('th', { text: 'Name' }), h('th', { text: 'Email' }), h('th', { text: 'Role' }), h('th', { text: 'Two-step' }), h('th', { text: 'Last sign-in' }), h('th'))),
           h('tbody', null, list.map(function (u) {
-            return h('tr', null, h('td', null, h('b', { text: u.name || '—' })), h('td', { text: u.email }), h('td', null, h('span', { class: 'pill ' + u.role, text: u.role })), h('td', { text: u.lastLogin ? ago(u.lastLogin) : 'never' }),
-              h('td', { style: 'text-align:right' }, u.id === state.user.id ? h('small', { text: 'you' }) : h('button', { class: 'btn sm danger', onclick: function () {
-                ask('Remove ' + u.email + '? They will be signed out.', 'Remove', function () { api('DELETE', '/api/users/' + u.id).then(function () { toast('User removed.'); load(); }).catch(function (e) { toast(e.message, true); }); });
-              } }, 'Remove')));
+            return h('tr', null, h('td', null, h('b', { text: u.name || '—' })), h('td', { text: u.email }), h('td', null, h('span', { class: 'pill ' + u.role, text: u.role })), h('td', null, h('span', { class: 'pill ' + (u.twoFactor ? 'done' : ''), text: u.twoFactor ? 'On' : 'Off' })), h('td', { text: u.lastLogin ? ago(u.lastLogin) : 'never' }),
+              h('td', { style: 'text-align:right;white-space:nowrap' }, u.id === state.user.id ? h('small', { text: 'you' }) : [
+                u.twoFactor ? h('button', { class: 'btn sm', style: 'margin-right:6px', onclick: function () {
+                  ask('Turn off two-step verification for ' + u.email + '? Use this when they lost their phone. They will be signed out.', 'Turn off', function () { api('POST', '/api/users/' + u.id + '/reset-2fa', {}).then(function () { toast('Two-step verification turned off.'); load(); }).catch(function (e) { toast(e.message, true); }); });
+                } }, 'Reset 2FA') : null,
+                h('button', { class: 'btn sm danger', onclick: function () {
+                  ask('Remove ' + u.email + '? They will be signed out.', 'Remove', function () { api('DELETE', '/api/users/' + u.id).then(function () { toast('User removed.'); load(); }).catch(function (e) { toast(e.message, true); }); });
+                } }, 'Remove')]));
           }))))), f);
       }).catch(function (e) { put(box, h('p', { class: 'err-msg', text: e.message })); });
     }
@@ -635,7 +665,7 @@
 
   /* ---------- account ---------- */
   function accountView() {
-    var f = h('form', { class: 'card', novalidate: true, style: 'max-width:480px' }, h('h2', { text: 'Change password' }),
+    var f = h('form', { class: 'card', novalidate: true, style: 'max-width:620px' }, h('h2', { text: 'Change password' }),
       h('p', { class: 'desc', text: 'Signed in as ' + state.user.email + '. Changing the password signs out your other devices.' }),
       h('label', { class: 'fld' }, h('span', { text: 'Current password' }), h('input', { name: 'current', type: 'password', autocomplete: 'current-password' })),
       h('label', { class: 'fld' }, h('span', { text: 'New password' }), h('input', { name: 'password', type: 'password', autocomplete: 'new-password' }), h('em', { text: 'At least 10 characters.' })),
@@ -645,6 +675,72 @@
       e.preventDefault();
       if (f.password.value !== f.again.value) return toast('The new passwords do not match.', true);
       api('POST', '/api/auth/password', { current: f.current.value, password: f.password.value }).then(function () { f.reset(); toast('Password updated.'); }).catch(function (er) { toast(er.message, true); });
+    });
+    return h('div', null, twoFactorCard(), f);
+  }
+  function twoFactorCard() {
+    var card = h('div', { class: 'card', style: 'max-width:620px' });
+    function paint() {
+      if (state.user.twoFactor) {
+        var pw = h('input', { type: 'password', autocomplete: 'current-password' });
+        put(card, h('h2', null, 'Two-step verification ', h('span', { class: 'pill done', text: 'On' })),
+          h('p', { class: 'desc', text: 'Signing in needs your password and a code from your authenticator app.' }),
+          h('label', { class: 'fld', style: 'max-width:320px' }, h('span', { text: 'Password (to turn it off)' }), pw),
+          h('button', { class: 'btn danger', onclick: function () {
+            api('POST', '/api/auth/2fa/disable', { password: pw.value }).then(function () { state.user.twoFactor = false; toast('Two-step verification is off.'); paint(); }).catch(function (e) { toast(e.message, true); });
+          } }, 'Turn off'));
+      } else {
+        put(card, h('h2', null, 'Two-step verification ', h('span', { class: 'pill', text: 'Off' })),
+          h('p', { class: 'desc', text: 'Protect the admin even if someone learns your password: signing in will also need a 6-digit code from an app on your phone (Google Authenticator, Microsoft Authenticator or Authy).' }),
+          h('button', { class: 'btn primary', onclick: function () {
+            api('POST', '/api/auth/2fa/start', {}).then(function (d) {
+              var code = h('input', { inputmode: 'numeric', autocomplete: 'one-time-code', maxlength: 8, placeholder: '123 456', style: 'max-width:180px' });
+              put(card, h('h2', { text: 'Set up two-step verification' }),
+                h('ol', { class: 'steps' },
+                  h('li', { text: 'Install Google Authenticator, Microsoft Authenticator or Authy on your phone.' }),
+                  h('li', null, 'In the app choose ', h('b', { text: 'Add account → Enter a setup key' }), ' and type this key (type: time based):'),
+                  h('li', { style: 'list-style:none;margin-left:-20px' }, h('div', { class: 'secret', text: d.secret.replace(/(.{4})/g, '$1 ').trim() })),
+                  h('li', null, 'On the phone itself you can also ', h('a', { href: d.uri, text: 'tap here to add it' }), '.'),
+                  h('li', { text: 'Enter the 6-digit code the app shows:' })),
+                h('div', { class: 'inline' }, code, h('button', { class: 'btn primary', onclick: function () {
+                  api('POST', '/api/auth/2fa/enable', { code: code.value }).then(function () { state.user.twoFactor = true; toast('Two-step verification is on.'); paint(); }).catch(function (e) { toast(e.message, true); });
+                } }, 'Turn on'), h('button', { class: 'btn ghost', onclick: paint }, 'Cancel')));
+              code.focus();
+            }).catch(function (e) { toast(e.message, true); });
+          } }, 'Set up'));
+      }
+    }
+    paint();
+    return card;
+  }
+
+  /* ---------- activity log (owner) ---------- */
+  var ACTIONS = { 'content.save': 'Content saved', 'site.republish': 'Website re-published', login: 'Signed in', 'login.failed': 'Failed sign-in', 'password.change': 'Password changed',
+    '2fa.enable': 'Two-step turned on', '2fa.disable': 'Two-step turned off', '2fa.reset': 'Two-step reset', 'lead.delete': 'Enquiry deleted', 'lead.status': 'Enquiry status',
+    'leads.export': 'Leads exported', 'image.upload': 'Image uploaded', 'image.delete': 'Image deleted', 'user.add': 'User added', 'user.remove': 'User removed', 'settings.save': 'Settings saved', setup: 'Installed' };
+  function activityView() {
+    var box = h('div', null, h('p', { class: 'empty', text: 'Loading…' }));
+    api('GET', '/api/activity').then(function (list) {
+      put(box, h('p', { class: 'desc', text: 'Who did what in the admin panel (last 300 events). Failed sign-ins are shown in red.' }),
+        h('div', { class: 'card' }, list.length ? h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl' },
+          h('thead', null, h('tr', null, h('th', { text: 'When' }), h('th', { text: 'Who' }), h('th', { text: 'What' }), h('th', { text: 'Details' }), h('th', { text: 'IP' }))),
+          h('tbody', null, list.map(function (a) {
+            return h('tr', { style: a.action === 'login.failed' ? 'color:#ff9aa2' : null }, h('td', { text: ago(a.at), title: fmtDate(a.at) }), h('td', { text: a.who }), h('td', null, h('b', { text: ACTIONS[a.action] || a.action })), h('td', { text: a.detail }), h('td', { text: a.ip }));
+          })))) : h('p', { class: 'empty', text: 'No activity yet.' })));
+    }).catch(function (e) { put(box, h('p', { class: 'err-msg', text: e.message })); });
+    return box;
+  }
+
+  /* ---------- settings (owner) ---------- */
+  function settingsView() {
+    var f = h('form', { class: 'card', novalidate: true, style: 'max-width:620px' }, h('h2', { text: 'Lead alerts' }),
+      h('p', { class: 'desc', text: 'Send an email for every new enquiry from the website. Leave empty to turn alerts off.' }),
+      h('label', { class: 'fld' }, h('span', { text: 'Send alerts to' }), h('input', { name: 'notifyEmail', type: 'email', placeholder: 'info@rhmanagements.com' })),
+      h('button', { class: 'btn primary', type: 'submit' }, 'Save settings'));
+    api('GET', '/api/settings').then(function (s) { f.notifyEmail.value = s.notifyEmail || ''; }).catch(function () {});
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      api('PUT', '/api/settings', { notifyEmail: f.notifyEmail.value.trim() }).then(function () { toast('Settings saved.'); }).catch(function (er) { toast(er.message, true); });
     });
     return f;
   }

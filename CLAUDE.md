@@ -11,7 +11,7 @@ session you are in.
 | Session | Scope | Folder |
 |---|---|---|
 | **Front end** (public website) | Pages, design, animations, responsive layout | repo root: `*.html`, `assets/` |
-| **Admin panel + back end** | Admin dashboard, login, API (PHP, JSON files), saving content, form submissions | `admin/` (see `admin/CLAUDE.md`, `admin/README.md`) |
+| **Admin panel + back end** | Admin dashboard, login, API (PHP + MySQL), saving content, form submissions | `admin/` (see `admin/CLAUDE.md`, `admin/README.md`) |
 
 - A front-end session must **not** build the admin panel, a server, a database or auth.
 - An admin/back-end session must **not** redesign public pages. It may only change the
@@ -50,7 +50,7 @@ Text fields `summary` (services) and `text` (recruitmentItems) may contain `**wo
 Do not rename keys without updating both the front end and the admin panel.
 After changing content, run `node tools/build-site.js` so the static HTML and SEO tags match.
 
-`assets/js/content.js` is **written by the admin panel** (`admin/api.php`) on every save, as
+`assets/js/content.js` is **written by the admin panel** (`admin/api.php`, from the MySQL database) on every save, as
 `window.SITE = {…}` with quoted keys. Hand edits still work (the API also reads plain JS object
 syntax) but the next admin save reformats the file. On the live server, content changes come from
 the admin panel. Optional `image` fields (`services[]`, `projects[]`, uploaded to

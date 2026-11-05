@@ -12,7 +12,7 @@ DirectoryIndex index.html index.php
   RewriteRule ^api/(.*)$ admin/api.php?r=$1 [QSA,L]
 
   # Never serve source, tooling or private data
-  RewriteRule ^(tools|admin/data)(/|$) - [F,L]
+  RewriteRule ^(tools|admin/data|admin/lib)(/|$) - [F,L]
   RewriteRule (^|/)\. - [F,L]
 </IfModule>
 

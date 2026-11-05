@@ -6,7 +6,7 @@
  */
 $path = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/');
 if (preg_match('~^/api/(.*)$~', $path, $m)) { $_GET['r'] = $m[1]; require __DIR__ . '/api.php'; return true; }
-if (preg_match('~(^|/)\.|^/(tools|admin/data)(/|$)|\.(md|py|lock|tmp|php)$~i', $path)) { http_response_code(404); echo 'Not found'; return true; }
+if (preg_match('~(^|/)\.|^/(tools|admin/data|admin/lib)(/|$)|\.(md|py|lock|tmp|php)$~i', $path)) { http_response_code(404); echo 'Not found'; return true; }
 if (str_starts_with($path, '/admin')) {
   header('Content-Security-Policy: ' . "default-src 'self'; img-src 'self' data: https:; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'");
   header('X-Frame-Options: DENY');

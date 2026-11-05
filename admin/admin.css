@@ -201,3 +201,10 @@ pre.log { background: #03060f; border: 1px solid var(--line); border-radius: 10p
 /* website preview */
 .pv-wrap { margin: 0 auto; transition: max-width .2s; border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden; background: #050914; }
 .pv-frame { display: block; width: 100%; height: calc(100vh - 230px); min-height: 480px; border: 0; }
+
+/* installer */
+.dbset { border: 1px solid var(--line-2); border-radius: 12px; padding: 12px 14px 2px; margin: 0 0 16px; }
+.dbset legend { padding: 0 6px; font-weight: 800; color: var(--gold); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+.auth-card { max-width: 440px; }
+.secret { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.05rem; letter-spacing: .12em; color: var(--ink); background: var(--field); border: 1px dashed var(--line-2); border-radius: 10px; padding: 10px 12px; word-break: break-all; user-select: all; }
+.steps { margin: 0 0 14px; padding-left: 20px; } .steps li { margin-bottom: 6px; }
