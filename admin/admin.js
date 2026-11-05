@@ -92,6 +92,8 @@
         ['tagline', T.area('Tagline')], ['intro', T.area('Intro paragraph')],
         ['phone', T.text('Phone')], ['email', T.text('Email', { type: 'email' })],
         ['address', T.area('Office address')], ['city', T.text('City / country')],
+        ['addressShort', T.text('Short address', { help: 'Shown in the top bar of every page, e.g. Al Nahda 1, Dubai · Mai Tower, 5th Floor.' })],
+        ['map', { t: 'map', label: 'Map location', help: 'What Google Maps should search for: building and area (e.g. Mai Tower, Al Nahda 1, Dubai) or coordinates (e.g. 25.2896,55.3690). Used for the Contact page map and all map links.' }],
         ['footer', T.area('Footer text')], ['copyright', T.text('Copyright line')]
       ] },
     { key: 'nav', title: 'Menu', icon: 'menu', desc: 'Main menu links in the header.', list: true, itemTitle: 'label', newItem: { label: 'New link', href: 'index.html', page: '' },
@@ -347,6 +349,12 @@
         return h('div', { class: 'fld' }, h('span', { text: def.label }), h('div', { class: 'iconfld' }, pv, nm, h('button', { class: 'btn sm', type: 'button', onclick: function () {
           pickIcon(obj[key], function (name) { set(name); pv.innerHTML = window.icon(name, 'ic'); nm.textContent = name; });
         } }, 'Change')));
+      }
+      case 'map': {
+        var mi = h('input', { type: 'text', value: v || '', placeholder: 'Mai Tower, Al Nahda 1, Dubai', oninput: function () { set(mi.value.trim()); } });
+        var check = h('a', { class: 'btn sm', target: '_blank', rel: 'noopener', onclick: function () { check.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(mi.value.trim() || obj.address || ''); } }, ic('pin'), 'Check on Google Maps');
+        check.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v || obj.address || '');
+        return h('div', { class: 'fld' }, h('span', { text: def.label }), h('div', { class: 'inline' }, h('div', { class: 'grow' }, mi), check), h('em', { text: def.help }));
       }
       case 'image': return imageField(obj, key, def);
       case 'strings': return stringsField(obj, key, def);

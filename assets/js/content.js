@@ -16,6 +16,8 @@ window.SITE = {
     email: "info@rhmanagements.com",
     address: "Al Nahda 1, Dubai – Mai Tower, 5th Floor, 510 Royal Business Center, Office no. 8",
     city: "Dubai, United Arab Emirates",
+    addressShort: "Al Nahda 1, Dubai · Mai Tower, 5th Floor", // top bar & about list
+    map: "Mai Tower, Al Nahda 1, Dubai", // Google Maps search text or "lat,lng"
     footer: "Your partner in business excellence. Transforming ideas into success.",
     copyright: "© 2026 RH Business Solutions & Marketing Management. All rights reserved.",
     logo: "" // optional image URL; when empty the RH monogram is shown

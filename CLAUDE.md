@@ -40,7 +40,7 @@ Conventions: vanilla ES5-style JS (no modules), escape user text with `esc()`, k
 
 ## Content contract (shared with the admin panel)
 
-`window.SITE` keys: `company`, `nav`, `hero` (`words[]` with `icon`, `text`, `color`), `stats`,
+`window.SITE` keys: `company` (incl. `addressShort` for the top bar and `map`, the Google Maps search text or `lat,lng`), `nav`, `hero` (`words[]` with `icon`, `text`, `color`), `stats`,
 `recruitmentItems`, `process`, `hiringSteps`, `services[]` (`id`, `group`, `icon`, `name`,
 `short`, `summary`, `text`, `points[]`, `tags[]`, `visual`), `projects`, `sourcing`
 (`africa[]`/`asia[]` as `[flagCode, name, lon, lat]`), `emirates`, `destinations`.

@@ -38,7 +38,7 @@ const org = {
   email: C.email,
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Mai Tower, 5th Floor, 510 Royal Business Center, Office no. 8, Al Nahda 1',
+    streetAddress: C.address,
     addressLocality: 'Dubai',
     addressRegion: 'Dubai',
     addressCountry: 'AE'
@@ -61,7 +61,7 @@ const pages = [
   { file: 'about.html', page: 'about', title: `About Us | ${C.short}, Dubai`, desc: 'A Dubai-based recruitment and HR solutions company with business setup, travel, development and marketing services. Learn who we are and how we work.', ld: [crumbs([['About Us', '/about.html']])] },
   { file: 'services.html', page: 'services', title: `Recruitment, HR & Business Services in Dubai | ${C.short}`, desc: 'Inside and outside recruitment, bulk manpower supply, HR solutions, business setup, travel & tour, web development, SEO, management and e-commerce in the UAE.', ld: [crumbs([['Services', '/services.html']])] },
   { file: 'portfolio.html', page: 'portfolio', title: `Portfolio | ${C.short}`, desc: 'Projects across recruitment drives, company formation, web development, e-commerce and digital marketing.', ld: [crumbs([['Portfolio', '/portfolio.html']])] },
-  { file: 'contact.html', page: 'contact', title: `Contact Us | ${C.short}, Al Nahda Dubai`, desc: `Call ${C.phone}, email ${C.email} or visit our office at Mai Tower, Al Nahda 1, Dubai.`, ld: [crumbs([['Contact Us', '/contact.html']]), { '@type': 'ContactPage', name: 'Contact ' + C.short, url: SITE_URL + '/contact.html', about: { '@id': ORG_ID } }] },
+  { file: 'contact.html', page: 'contact', title: `Contact Us | ${C.short}, Al Nahda Dubai`, desc: `Call ${C.phone}, email ${C.email} or visit our office at ${C.addressShort || C.address}.`, ld: [crumbs([['Contact Us', '/contact.html']]), { '@type': 'ContactPage', name: 'Contact ' + C.short, url: SITE_URL + '/contact.html', about: { '@id': ORG_ID } }] },
   { file: 'hire-staff.html', page: 'hire', title: `Hire Staff in the UAE — Skilled & Unskilled Workers | ${C.short}`, desc: 'Request manpower for your company: skilled and unskilled workers, bulk hiring from inside and outside the UAE, with visa and joining support.', ld: [crumbs([['Hire Staff', '/hire-staff.html']])] },
   { file: 'partner-with-us.html', page: 'partner', title: `Partner With Us — Recruitment Agents | ${C.short}`, desc: 'Recruitment agents and agencies in Africa and Asia: partner with us to place your candidates with companies in the UAE.', ld: [crumbs([['Partner With Us', '/partner-with-us.html']])] }
 ].concat(S.services.map((x) => ({
